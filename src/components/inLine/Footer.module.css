@@ -1,0 +1,76 @@
+/* src/components/Footer.module.css */
+
+.footer {
+    background-color: var(--color-dark--0);
+    color: #fff;
+    padding: 20px 40px;
+    font-family: Poppins, sans-serif;
+}
+
+.footer em {
+    color: var(--color-dark);
+    font-weight: normal;
+}
+
+.footerContent {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footerSection {
+    margin: 20px;
+    flex: 1;
+    min-width: 250px;
+    font-size: 1.2rem;
+}
+
+.footerSection h4 {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+.footerSection p,
+.footerSection ul {
+    margin: 0 0 10px;
+}
+
+.footerSection ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footerSection ul li {
+    margin-bottom: 10px;
+}
+
+.footerSection ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.footerSection ul li a:hover {
+    text-decoration: underline;
+}
+
+.footerSection ul li a:global(.active) {
+    color: var(--color-dark);
+    cursor: default;
+    pointer-events: none;
+}
+
+
+
+.footerBottom {
+    text-align: center;
+    padding: 10px 0;
+    border-top: 1px solid #444;
+    font-size: 1rem;
+}
+
+.footerBottom p {
+    margin: 0;
+}

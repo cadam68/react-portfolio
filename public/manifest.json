@@ -1,0 +1,19 @@
+{
+  "name": "In-Line Portfolio",
+  "short_name": "Portfolio",
+  "description": "Create and host stunning portfolio websites effortlessly.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4a90e2",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "author": "In-Line",
+  "lang": "en-US"
+}

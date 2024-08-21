@@ -1,0 +1,30 @@
+/* ConfirmModal.module.css */
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* High z-index to ensure it's on top of other elements */
+}
+
+.modalContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1001; /* Ensure the content is above the overlay */
+}
+
+.buttonsContainer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+

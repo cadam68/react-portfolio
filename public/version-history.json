@@ -1,0 +1,16 @@
+{
+  "versions": [
+    {
+      "version": "2.3",
+      "changes": [
+        {
+          "title": "Add Shortcuts Feature",
+          "description" : [
+            "Add Shortcuts for main actions.",
+            "Add Contextuel Shortcuts : simply use the shortcut associated to each category to pre-select the category in the Add Expense Form.\nThe shortcut correspond to Ctrl+Shift and the First letter of the category name."
+            ]
+        }
+      ]
+    }
+  ]
+}

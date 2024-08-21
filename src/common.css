@@ -1,0 +1,55 @@
+.debug {
+    border: 1px red dashed;
+}
+
+.errorMessage {
+    font-style: italic;
+    font-size: 10px;
+    position: absolute;
+    bottom: -14px;
+    left: 10px;
+    width: 20rem;
+}
+
+div.react-datepicker-wrapper input,
+input[type="number"].input-small {
+    width: 10rem;
+}
+
+span.input-big {
+    flex-grow: 1;
+}
+span.input-big input {
+    width: 100%;
+}
+
+span:has(> span.errorMessage) {
+    position: relative;
+}
+
+input.error, select.error {
+    border: 1px solid red;
+}
+
+div.react-datepicker__tab-loop {
+    display: inline-block;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+p.space-between {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+p.space-between *:last-child,
+p.space-between *:last-child * {
+    margin-right: 0;
+}
+
+

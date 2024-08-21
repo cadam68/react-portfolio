@@ -1,0 +1,33 @@
+
+.toastContainer {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+/* the value of --fadeout-delay is set dynamically in the React component using inline styles. eg { "--fadeout-delay": `3s` }  */
+.toast {
+    padding: 1rem;
+    border: 1px solid var(--color-light--1);
+    margin-bottom: 0.5rem;
+    animation: fadein 0.5s forwards, fadeout 0.5s var(--fadeout-delay) forwards;
+    width: 20rem;
+    overflow: hidden;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.toast-error { background: rgba(253, 221, 211, 0.7);  }
+.toast-info { background: rgba(221, 221, 253, 0.7);  }
+.toast-warning { background: rgba(253,217,129, 0.7); }
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeout {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}

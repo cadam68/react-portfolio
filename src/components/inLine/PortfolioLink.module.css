@@ -1,0 +1,25 @@
+.item {
+    display: inline-block;
+    border-radius: 6px;
+    border: 1px solid var(--color-light--2);
+    color: var(--color-dark--1);
+    padding: 10px 20px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+.item:hover {
+    border: 1px solid var(--color-light--1);
+    transform: scale(1.05);
+}
+
+.item.vip {
+    background-color: var(--color-light);
+    border: 1px solid var(--color-light);
+}
+
+.item.vip:hover {
+    border: 1px solid var(--color-medium);
+}

@@ -1,0 +1,40 @@
+.markdown-content .card {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+
+    padding: 0;
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: 0 0 0 transparent;
+}
+
+.markdown-content .card-image {
+    flex: 1;
+    max-width: 150px;
+    align-self: start;
+    margin-top: 2rem;
+}
+
+.markdown-content .card-image img {
+    width: 100%;
+    height: auto;
+    border: solid rgba(0, 0, 0, 0.1) 1px;
+    border-radius: 50%;
+}
+
+
+.markdown-content .card-content {
+    flex: 2;
+    padding: 16px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.markdown-content .card-content h2 {
+    margin-top: 0;
+}
+
+.markdown-content .card-content p {
+    margin: 8px 0 0;
+}

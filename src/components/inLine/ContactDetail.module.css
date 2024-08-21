@@ -1,0 +1,38 @@
+/* src/components/ContactDetail.module.css */
+
+.contactDetail {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.icon {
+    text-align: center;
+    font-size: 3.5rem;
+    color: white;
+    margin-right: 3rem;
+    background-color: #0056b3;
+    width: 5.5rem;
+    height: 5.5rem;
+    border-radius: 6px;
+}
+
+.text {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.text .title {
+    font-weight: 800;
+    font-size: 2rem;
+    color: var(--color-dark--0);
+    margin: 6px 0 0 0;
+    line-height: 2rem;
+}
+
+.text .info {
+    font-size: 1.6rem;
+    margin: 0;
+    color: var(--color-dark--3);
+}

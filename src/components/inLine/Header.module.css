@@ -1,0 +1,51 @@
+/* src/components/Header.module.css */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: white;
+    color: var(--color-dark);
+    font-family: Poppins, sans-serif;
+}
+
+.logo {
+    font-size: 3rem;
+    font-weight: 800;
+}
+
+.logo img {
+    width: 70px;
+    height: auto;
+}
+
+.nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.nav ul li {
+    display: inline;
+}
+
+.nav ul li a {
+    color: var(--color-dark--0);
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.nav ul li a:hover {
+    border-bottom: 2px solid var(--color-dark);
+}
+
+.nav ul li a:global(.active) {
+    color: var(--color-dark);
+    border-bottom: 2px solid var(--color-dark);
+    cursor: default;
+    pointer-events: none;
+}
