@@ -291,3 +291,7 @@ export const sortAndLimitPortfolioItems = (items, limit = 100) => {
 
   return result;
 };
+
+export const removeDiacritics = (str) => {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+};

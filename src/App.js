@@ -9,10 +9,14 @@ import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import Home from "./pages/Home";
 import InLine from "./pages/InLine";
+import AdminPage from "./pages/AdminPage";
 
 const App = () => {
   const { debug } = useDebugContext();
-  const { isReady,  confirmService: { ConfirmModalComponent }, } = useAppContext();
+  const {
+    isReady,
+    confirmService: { ConfirmModalComponent },
+  } = useAppContext();
 
   return (
     <BrowserRouter>
@@ -29,6 +33,7 @@ const App = () => {
               <Route path={"home"} element={<Home />} />
               <Route path={"aboutUs"} element={<AboutUs />} />
               <Route path={"contactUs"} element={<ContactUs />} />
+              <Route path={"admin"} element={<AdminPage />} />
             </Route>
             <Route path="/portfolio/:userId/:lg?/:itemId?" element={<Portfolio key={window.location.pathname} />} />
             <Route path="*" element={<Navigate to="/" />} />

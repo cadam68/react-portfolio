@@ -1,0 +1,62 @@
+/* Minimalist CSS for the SortableTable */
+.sortableTable table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    /* table-layout: fixed; /* Enforces consistent column widths */
+}
+
+.sortableTable th, .sortableTable td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sortableTable th {
+    cursor: pointer;
+    background-color: #f4f4f4;
+}
+
+.sortableTable th:hover {
+    background-color: #e9e9e9;
+}
+
+.sortableTable tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.sortableTable tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.sortableTable button {
+    padding: 10px 20px;
+    margin: 10px 5px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.sortableTable button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.sortableTable button:not(:disabled):hover {
+    background-color: #0056b3;
+}
+
+.sortableTable span {
+    margin: 0 10px;
+    font-size: 14px;
+    color: #555;
+}
