@@ -99,9 +99,9 @@ const AppContextProvider = ({ children }) => {
       try {
         logger.info(`loading portfolio for userId ${pid}`);
         // check if portfolio exists in database & increment nbVisit
-
-        // --------
-
+        let data = await FetchService().fetchPortfolio(pid, "INC_VISITED", abortCtrl);
+        if (!data) throw new Error(`Portfolio for userId ${pid} not available`);
+        //
         let urlProfile = await FetchService().fetchDownloadUrl(`${pid}.profile.json`, pid, abortCtrl);
         logger.info("urlProfile", urlProfile);
         let portfolioData = await FetchService().fetchDownloadJson(urlProfile, abortCtrl);

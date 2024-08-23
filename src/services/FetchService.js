@@ -90,12 +90,29 @@ const FetchService = () => {
       },
       signal: signal,
     });
+    if (!res.ok) throw new Error("Something went wrong with fetching portfolioList");
+    const data = await res.json();
+    return data;
+  };
+
+  const fetchPortfolio = async (userid, action, abortCtrl) => {
+    const signal = abortCtrl.signal;
+    const res = await fetch(`${settings.baseApiUrl}/portfolio?userid=${encodeURI(userid)}&action=${encodeURI(action)}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/octet-stream",
+        "X-API-Key": settings.apiKey,
+      },
+      signal: signal,
+    });
+    if (res.status === 404) return undefined; // NOT FOUND
+
     if (!res.ok) throw new Error("Something went wrong with fetching portfolio");
     const data = await res.json();
     return data;
   };
 
-  return { downloadFile, fetchDownloadUrl, fetchDownloadJson, fetchMarkdownFile, fetchPortfolioList };
+  return { downloadFile, fetchDownloadUrl, fetchDownloadJson, fetchMarkdownFile, fetchPortfolioList, fetchPortfolio };
 };
 
 export { FetchService };
