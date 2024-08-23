@@ -274,8 +274,8 @@ export const sortAndLimitPortfolioItems = (items, limit = 100) => {
     }
   };
   // Separate VIP and non-VIP items
-  const vipItems = items.filter((item) => item.vip);
-  const nonVipItems = items.filter((item) => !item.vip);
+  const vipItems = items.filter((item) => item.role.includes("VIP"));
+  const nonVipItems = items.filter((item) => !item.role.includes("VIP"));
   shuffle(nonVipItems);
 
   // Insert all VIP items within the first 100 positions

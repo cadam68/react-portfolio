@@ -80,9 +80,9 @@ const FetchService = () => {
     return text;
   };
 
-  const fetchPortfolio = async (abortCtrl) => {
+  const fetchPortfolioList = async (abortCtrl) => {
     const signal = abortCtrl.signal;
-    const res = await fetch(`${settings.baseApiUrl}/portfolio`, {
+    const res = await fetch(`${settings.baseApiUrl}/portfolioList`, {
       method: "GET",
       headers: {
         "Content-Type": "application/octet-stream",
@@ -95,7 +95,7 @@ const FetchService = () => {
     return data;
   };
 
-  return { downloadFile, fetchDownloadUrl, fetchDownloadJson, fetchMarkdownFile, fetchPortfolio };
+  return { downloadFile, fetchDownloadUrl, fetchDownloadJson, fetchMarkdownFile, fetchPortfolioList };
 };
 
 export { FetchService };

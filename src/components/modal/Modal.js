@@ -1,6 +1,6 @@
 import React from "react";
 import "./Modal.css";
-import Button from "./Button";
+import Button from "./../divers/Button";
 import PropTypes from "prop-types";
 
 const Modal = ({ show, onClose, children }) => {

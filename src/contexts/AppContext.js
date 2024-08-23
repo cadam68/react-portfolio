@@ -60,7 +60,6 @@ const fetchAllDownloadUrls = async (downloadReferences, pid, abortCtrl) => {
   return values.filter((item) => item != undefined);
 };
 
-
 const AppContextProvider = ({ children }) => {
   const { i18n } = useComponentTranslation();
   const { requestConfirm, ConfirmModalComponent } = useConfirm(styles);
@@ -99,6 +98,10 @@ const AppContextProvider = ({ children }) => {
       setIsLoading(true);
       try {
         logger.info(`loading portfolio for userId ${pid}`);
+        // check if portfolio exists in database & increment nbVisit
+
+        // --------
+
         let urlProfile = await FetchService().fetchDownloadUrl(`${pid}.profile.json`, pid, abortCtrl);
         logger.info("urlProfile", urlProfile);
         let portfolioData = await FetchService().fetchDownloadJson(urlProfile, abortCtrl);
@@ -120,7 +123,6 @@ const AppContextProvider = ({ children }) => {
       abortCtrl.abort();
     };
   }, [portfolioId]);
-
 
   const contextValues = useMemo(
     () => ({
