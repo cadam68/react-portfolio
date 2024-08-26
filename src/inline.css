@@ -11,15 +11,14 @@
     position: relative;
     text-align: center;
     color: var(--color-dark--1);
-    height: 24rem;
-    overflow: hidden;
+    background-color: #D3E7F2FF;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .bannerImage {
-    width: 100%;
-    height: auto;
-    max-height: 400px;
-    object-fit: cover;
+    height: 200px;
+    object-fit: contain;
 }
 
 .inline-banner h1 {
