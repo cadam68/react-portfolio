@@ -25,7 +25,7 @@ const currentDate = new Date();
 
 // => used to convert JSON dates
 // /!\ dates are converted to strings because JSON doesn't have a native date type. //!\
-const converter = (rawValues) => {
+const converter = rawValues => {
   // *** exemple of implementation ***
   // rawValues?.data.forEach((item) => {
   //   if (item.date && !isNaN(Date.parse(item.date))) item.date = startOfDay(new Date(item.date));
@@ -37,8 +37,8 @@ const fetchAllDownloadUrls = async (downloadReferences, pid, abortCtrl) => {
   const firebaseBaseUrl = "firebase://";
   const values = await Promise.all(
     downloadReferences
-      .filter((item) => settings.downloadTypes.includes(item.type))
-      .map(async (item) => {
+      .filter(item => settings.downloadTypes.includes(item.type))
+      .map(async item => {
         try {
           let downloadUrl = item.target;
           let data;
@@ -57,7 +57,7 @@ const fetchAllDownloadUrls = async (downloadReferences, pid, abortCtrl) => {
         }
       })
   );
-  return values.filter((item) => item != undefined);
+  return values.filter(item => item != undefined);
 };
 
 const AppContextProvider = ({ children }) => {
@@ -94,7 +94,7 @@ const AppContextProvider = ({ children }) => {
   useEffect(() => {
     const abortCtrl = new AbortController();
 
-    const fetchPortfolio = async (pid) => {
+    const fetchPortfolio = async pid => {
       setIsLoading(true);
       try {
         logger.info(`loading portfolio for userId ${pid}`);

@@ -1,76 +1,23 @@
 /* src/components/AboutUs.module.css */
 
-.aboutUs {
-    font-family: Poppins, sans-serif;
-    color: #333;
-    line-height: 1.6;
-    margin: 0;
-    padding: 0;
-}
-
-.banner {
-    position: relative;
-    text-align: center;
-    color: var(--color-dark--1);
-}
-
-.bannerImage {
-    width: 100%;
-    height: auto;
-    max-height: 400px;
-    object-fit: cover;
-}
-
-.banner h1 {
-    position: absolute;
-    top: 50%;
-    left: 40px;
-    transform: translate(0, -50%);
-    font-size: 4.4rem;
-    margin: 0;
-    color: var(--color-dark--2);
-}
-
-.icon {
-    display: block;
-    font-size: 4rem;
-    color: black;
-}
-
 .mission:hover .icon,
 .vision:hover .icon {
     color: var(--color-dark);
 }
 
-.content {
-    padding: 40px;
-}
-
-.content h2 {
-    margin-top: 10px;
-    font-size: 3rem;
-    font-weight: 800;
-    padding-bottom: 0px;
-    margin-bottom: 20px;
-    display: inline-block;
-    color: #0056b3;
-
-}
-
-.content p {
-    margin-bottom: 30px;
-    font-size: 1.6rem;
-    /* text-align: justify; */
-}
-
-.content .portfolioList {
+ .portfolioList {
     background-color: #fdfdfd;
     padding: 25px;
-    box-shadow: 0px 0px 30px -15px rgba(0, 0, 0, 0.29);
+    box-shadow: var(--box-shadow-large);
     border-radius: 6px;
 }
 
 .portfolioList input {
     width: 25rem;
     padding: 10px 20px;
+}
+
+.content h2 {
+    color: var(--color-header-dark);
+    border-bottom: none;
 }

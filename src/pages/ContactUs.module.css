@@ -1,36 +1,5 @@
 /* src/components/ContactUs.module.css */
 
-.banner {
-    position: relative;
-    text-align: center;
-    color: var(--color-dark--1);
-}
-
-.bannerImage {
-    width: 100%;
-    height: auto;
-    max-height: 400px;
-    object-fit: cover;
-}
-
-.banner h1 {
-    position: absolute;
-    top: 50%;
-    left: 40px;
-    transform: translate(0, -50%);
-    font-size: 4.4rem;
-    margin: 0;
-    color: var(--color-dark--2);
-}
-
-.contactUs {
-    font-family: Poppins, sans-serif;
-    color: #333;
-    line-height: 1.6;
-    margin: 0;
-    padding: 0;
-}
-
 .contactContent {
     display: flex;
     align-items: center;
@@ -47,7 +16,7 @@
 
 .contactInfo h2 {
     font-size: 3rem;
-    color: #0056b3;
+    color: var(--color-header-dark);
     margin-bottom: 10px;
     font-weight: 800;
 }
@@ -75,7 +44,7 @@
 
 .contactMap h2 {
     font-size: 2rem;
-    color: #007bff;
+    color: var(--color-header);;
     margin-bottom: 20px;
     text-align: center;
 }

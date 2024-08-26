@@ -2,9 +2,18 @@
 
 import React from "react";
 import styles from "./Header.module.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../contexts/AuthContext";
 
-const Header = () => {
+const Header = ({ links }) => {
+  const { user, logout } = useAuthContext();
+  const navigate = useNavigate();
+
+  const logoutHandler = () => {
+    logout();
+    navigate("/home", { replace: true });
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
@@ -13,15 +22,24 @@ const Header = () => {
       </div>
       <nav className={styles.nav}>
         <ul>
-          <li>
-            <NavLink to={"/home"}>Home</NavLink>
-          </li>
-          <li>
-            <NavLink to={"/aboutUs"}>About Us</NavLink>
-          </li>
-          <li>
-            <NavLink to={"/contactUs"}>Contact Us</NavLink>
-          </li>
+          {links.map(item => {
+            const hasAccess = !item.accessRoles || (item?.accessRoles && user?.role && item.accessRoles.some(role => user.role.includes(role)));
+            if (hasAccess)
+              return (
+                <li key={item.link}>
+                  <NavLink to={item.link}>{item.name}</NavLink>
+                </li>
+              );
+          })}
+          {user ? (
+            <li>
+              <a onClick={logoutHandler}>Logout</a>
+            </li>
+          ) : (
+            <li>
+              <NavLink to={"/login"}>Login</NavLink>
+            </li>
+          )}
         </ul>
       </nav>
     </header>

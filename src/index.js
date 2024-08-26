@@ -10,6 +10,7 @@ import { DndProvider } from "react-dnd";
 import { AppContextProvider } from "./contexts/AppContext";
 import { ToastProvider } from "./contexts/ToastContext";
 import "./i18n";
+import { AuthContextProvider } from "./contexts/AuthContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -19,7 +20,9 @@ root.render(
       <AppContextProvider>
         <ToastProvider>
           <DndProvider backend={HTML5Backend}>
-            <App />
+            <AuthContextProvider>
+              <App />
+            </AuthContextProvider>
           </DndProvider>
         </ToastProvider>
       </AppContextProvider>

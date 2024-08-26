@@ -4,7 +4,7 @@ import React from "react";
 import styles from "./Footer.module.css";
 import { NavLink } from "react-router-dom";
 
-const Footer = () => {
+const Footer = ({ links }) => {
   return (
     <footer className={styles.footer}>
       <div className={styles.footerContent}>
@@ -17,15 +17,13 @@ const Footer = () => {
         <div className={styles.footerSection}>
           <h4>Quick Links</h4>
           <ul>
-            <li>
-              <NavLink to={"/home"}>Home</NavLink>
-            </li>
-            <li>
-              <NavLink to={"/aboutUs"}>About Us</NavLink>
-            </li>
-            <li>
-              <NavLink to={"/contactUs"}>Contact Us</NavLink>
-            </li>
+            {links
+              .filter(item => !item.accessRoles)
+              .map(item => (
+                <li key={item.link}>
+                  <NavLink to={item.link}>{item.name}</NavLink>
+                </li>
+              ))}
           </ul>
         </div>
         <div className={styles.footerSection}>

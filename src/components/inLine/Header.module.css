@@ -37,6 +37,7 @@
     text-decoration: none;
     font-size: 1.5rem;
     font-weight: 500;
+    cursor: pointer;
 }
 
 .nav ul li a:hover {

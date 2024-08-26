@@ -1,0 +1,56 @@
+/* src/components/AboutUs.module.css */
+
+
+.loginContainer {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow-middle);
+    width: 320px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.icon {
+    color: #5c93c5;
+    margin-bottom: 2rem;
+}
+
+.inputContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    border: 1px solid #b3c0d1;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f7f9fc;
+}
+
+.inputIcon {
+    margin-right: 10px;
+    color: #5c93c5;
+}
+
+.loginButton {
+    background-color: #418bca;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.loginButton:hover {
+    background-color: #3578a7;
+}
+
+.loginForm input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 16px;
+    background-color: transparent;
+}

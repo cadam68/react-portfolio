@@ -7,6 +7,13 @@ const SortableTable = ({ data, headers, itemsPerPage, displaySearch, keyAttribut
   const [sortColumn, setSortColumn] = useState(headers.find((header) => header.sortable)?.key || "");
   const [sortDirection, setSortDirection] = useState("asc");
 
+  /* NOTE : PROPS should be IMMUTABLE, create a shallow copy of the array with copied objects if needed
+    const dataCopy = data.map(item => ({..item }));
+    dataCopy.forEach(item => {
+      item.name = `${item.firstname} ${item.lastname}`;
+    });
+  */
+
   const [inputValues, setInputValues] = useState({
     searchCriteria: "",
   });

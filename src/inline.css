@@ -1,0 +1,84 @@
+
+/* Root Variables */
+:root {
+    --color-header: #007bff;
+    --color-header-dark: #0056b3;
+    --box-shadow-large: 0px 0px 30px -15px rgba(0, 0, 0, 0.29);
+    --box-shadow-middle: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.inline-banner {
+    position: relative;
+    text-align: center;
+    color: var(--color-dark--1);
+    height: 24rem;
+    overflow: auto;
+}
+
+.bannerImage {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: cover;
+}
+
+.inline-banner h1 {
+    position: absolute;
+    top: 50%;
+    left: 40px;
+    transform: translate(0, -50%);
+    font-size: 4.4rem;
+    margin: 0;
+    color: var(--color-dark--2);
+}
+
+.icon {
+    display: block;
+    font-size: 4rem;
+    color: var(--color-dark--1);
+}
+
+.inline-section {
+    color: var(--color-dark--2);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+.inline-content {
+    padding: 40px;
+}
+
+.inline-content h2 {
+    margin-top: 10px;
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--color-header);
+    border-bottom: 2px solid var(--color-header);
+    padding-bottom: 0px;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.inline-content p {
+    margin-bottom: 30px;
+    font-size: 1.6rem;
+    /* text-align: justify; */
+}
+
+.inline-popup div {
+    width: 30vw;
+    color: var(--color-dark--1);
+}
+
+.inline-popup h2 {
+    color: var(--color-header-dark);
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+}
+
+.inline-popup div {
+    font-size: 1.6rem;
+}
+

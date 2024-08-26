@@ -112,7 +112,24 @@ const FetchService = () => {
     return data;
   };
 
-  return { downloadFile, fetchDownloadUrl, fetchDownloadJson, fetchMarkdownFile, fetchPortfolioList, fetchPortfolio };
+  const login = async (userid, password, abortCtrl) => {
+    const signal = abortCtrl.signal;
+    const res = await fetch(`${settings.baseApiUrl}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-Key": settings.apiKey,
+      },
+      signal: signal,
+      body: JSON.stringify({ userid, password }),
+    });
+
+    if (!res.ok) throw new Error("Something went wrong with fetching portfolio");
+    const data = await res.json();
+    return data;
+  };
+
+  return { downloadFile, fetchDownloadUrl, fetchDownloadJson, fetchMarkdownFile, fetchPortfolioList, fetchPortfolio, login };
 };
 
 export { FetchService };

@@ -11,14 +11,10 @@
     width: 20rem;
 }
 
-div.react-datepicker-wrapper input,
-input[type="number"].input-small {
-    width: 10rem;
-}
-
 span.input-big {
     flex-grow: 1;
 }
+
 span.input-big input {
     width: 100%;
 }

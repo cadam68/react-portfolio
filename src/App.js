@@ -10,6 +10,8 @@ import ContactUs from "./pages/ContactUs";
 import Home from "./pages/Home";
 import InLine from "./pages/InLine";
 import AdminPage from "./pages/AdminPage";
+import PrivateRoute from "./components/system/PrivateRoute";
+import Login from "./pages/Login";
 
 const App = () => {
   const { debug } = useDebugContext();
@@ -33,7 +35,15 @@ const App = () => {
               <Route path={"home"} element={<Home />} />
               <Route path={"aboutUs"} element={<AboutUs />} />
               <Route path={"contactUs"} element={<ContactUs />} />
-              <Route path={"admin"} element={<AdminPage />} />
+              <Route path={"login"} element={<Login />} />
+              <Route
+                path={"admin"}
+                element={
+                  <PrivateRoute role="admin" loginPath={"/login"}>
+                    <AdminPage />
+                  </PrivateRoute>
+                }
+              />
             </Route>
             <Route path="/portfolio/:userId/:lg?/:itemId?" element={<Portfolio key={window.location.pathname} />} />
             <Route path="*" element={<Navigate to="/" />} />

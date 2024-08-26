@@ -1,3 +1,6 @@
 {
-  "printWidth": 180
+  "printWidth": 220,
+  "jsxBracketSameLine": true,
+  "bracketSpacing": true,
+  "arrowParens": "avoid"
 }

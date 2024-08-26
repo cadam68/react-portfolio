@@ -1,13 +1,12 @@
-
 import React from "react";
 import styles from "./ContactUs.module.css";
 import ContactDetail from "../components/inLine/ContactDetail";
 
 const ContactUs = () => {
   return (
-    <div className={styles.contactUs}>
-      <div className={styles.banner}>
-        <img src="/images/BannerContactUs.jpg" alt="About Us Banner" className={styles.bannerImage} />
+    <div className={"inline-section"}>
+      <div className={"inline-banner"}>
+        <img src="/images/BannerContactUs.jpg" alt="About Us Banner" className={"bannerImage"} />
         <h1 className="slide-in">Contact Us</h1>
       </div>
       <div className={styles.contactContent}>
@@ -29,8 +28,7 @@ const ContactUs = () => {
             height="450"
             style={{ border: 0, borderRadius: "6px" }}
             allowFullScreen=""
-            loading="lazy"
-          ></iframe>
+            loading="lazy"></iframe>
         </div>
       </div>
     </div>
