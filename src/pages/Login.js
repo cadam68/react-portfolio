@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styles from "./Login.module.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuthContext } from "./../contexts/AuthContext";
-import { FaArrowTrendUp } from "react-icons/fa6";
 import { FaLock, FaUser, FaUserCircle } from "react-icons/fa";
 
 const Login = () => {

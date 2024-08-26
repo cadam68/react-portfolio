@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "./Home.module.css";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import PortfolioLink from "../components/inLine/PortfolioLink";
