@@ -12,7 +12,7 @@
     text-align: center;
     color: var(--color-dark--1);
     height: 24rem;
-    overflow: auto;
+    overflow: hidden;
 }
 
 .bannerImage {
