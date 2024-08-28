@@ -21,7 +21,7 @@ const InLine = () => {
   const fetchPortfolio = async controller => {
     const signal = controller.signal;
     try {
-      const data = await FetchService().fetchPortfolioList(signal);
+      const data = await FetchService().fetchPortfolioList(false, signal);
       setPortfolioList(sortAndLimitPortfolioItems(data));
     } catch (err) {
       if (err.name === "AbortError") console.log("fetch portfolio aborted!");

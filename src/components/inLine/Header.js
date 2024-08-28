@@ -1,9 +1,10 @@
 // src/components/Header.js
 
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./Header.module.css";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../contexts/AuthContext";
+import Hover from "../divers/Hover";
 
 const Header = ({ links }) => {
   const { user, logout } = useAuthContext();
@@ -23,7 +24,7 @@ const Header = ({ links }) => {
       <nav className={styles.nav}>
         <ul>
           {links.map(item => {
-            const hasAccess = !item.accessRoles || (item?.accessRoles && user?.role && item.accessRoles.some(role => user.role.includes(role)));
+            const hasAccess = !item.accessRoles || (item?.accessRoles && user?.role && item.accessRoles.some(role => user.role.toUpperCase().includes(role.toUpperCase())));
             if (hasAccess)
               return (
                 <li key={item.link}>
@@ -33,7 +34,9 @@ const Header = ({ links }) => {
           })}
           {user ? (
             <li>
-              <a onClick={logoutHandler}>Logout</a>
+              <Hover visible={true} caption={`${user.name} currently logged`}>
+                <a onClick={logoutHandler}>Logout</a>
+              </Hover>
             </li>
           ) : (
             <li>

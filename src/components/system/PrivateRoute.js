@@ -14,7 +14,7 @@ const PrivateRoute = ({ role, loginPath, children }) => {
     return null;
   }
 
-  if (role && user.role !== role) {
+  if (role && !user.role.toUpperCase().includes(role.toUpperCase())) {
     // User is authenticated but does not have the required role
     if (loginPath) return <Navigate to="/login" state={{ from: location }} replace />;
     navigate(-1);

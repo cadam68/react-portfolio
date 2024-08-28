@@ -64,7 +64,7 @@ const FetchService = () => {
     }
   };
 
-  const fetchMarkdownFile = async (filePath) => {
+  const fetchMarkdownFile = async filePath => {
     let fileUrl = `${settings.baseApiUrl}/firebase/download?url=${encodeURIComponent(filePath)}`;
 
     const response = await fetch(fileUrl, {
@@ -80,14 +80,18 @@ const FetchService = () => {
     return text;
   };
 
-  const fetchPortfolioList = async (abortCtrl) => {
+  const fetchPortfolioList = async (detailed, abortCtrl) => {
     const signal = abortCtrl.signal;
-    const res = await fetch(`${settings.baseApiUrl}/portfolioList`, {
+
+    const headers = { "X-API-Key": settings.apiKey };
+    if (detailed) {
+      const token = localStorage.getItem("token");
+      headers["Authorization"] = token;
+    }
+
+    const res = await fetch(`${settings.baseApiUrl}/${detailed ? "portfolioDetailList" : "portfolioList"}`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/octet-stream",
-        "X-API-Key": settings.apiKey,
-      },
+      headers: headers,
       signal: signal,
     });
     if (!res.ok) throw new Error("Something went wrong with fetching portfolioList");
@@ -100,7 +104,6 @@ const FetchService = () => {
     const res = await fetch(`${settings.baseApiUrl}/portfolio?userid=${encodeURI(userid)}&action=${encodeURI(action)}`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/octet-stream",
         "X-API-Key": settings.apiKey,
       },
       signal: signal,
@@ -114,7 +117,7 @@ const FetchService = () => {
 
   const login = async (userid, password, abortCtrl) => {
     const signal = abortCtrl.signal;
-    const res = await fetch(`${settings.baseApiUrl}/login`, {
+    const res = await fetch(`${settings.baseApiUrl}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -124,12 +127,39 @@ const FetchService = () => {
       body: JSON.stringify({ userid, password }),
     });
 
-    if (!res.ok) throw new Error("Something went wrong with fetching portfolio");
     const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Something went wrong with fetching login");
     return data;
   };
 
-  return { downloadFile, fetchDownloadUrl, fetchDownloadJson, fetchMarkdownFile, fetchPortfolioList, fetchPortfolio, login };
+  /*
+  Usage : Check if the token is valid
+  -----
+  useEffect(() => {
+    (async () => {
+      const isAuthorized = await FetchService().isAuthorized();
+      console.log("isAuthorized", isAuthorized);
+    })();
+  }, []);
+
+   */
+  const isAuthorized = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return false;
+
+      const res = await fetch(`${settings.baseApiUrl}/auth/authorized`, {
+        method: "GET",
+        headers: { "X-API-Key": settings.apiKey, Authorization: token },
+      });
+      if (!res.ok) throw new Error();
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  return { downloadFile, fetchDownloadUrl, fetchDownloadJson, fetchMarkdownFile, fetchPortfolioList, fetchPortfolio, login, isAuthorized };
 };
 
 export { FetchService };
