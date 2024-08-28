@@ -132,17 +132,7 @@ const FetchService = () => {
     return data;
   };
 
-  /*
-  Usage : Check if the token is valid
-  -----
-  useEffect(() => {
-    (async () => {
-      const isAuthorized = await FetchService().isAuthorized();
-      console.log("isAuthorized", isAuthorized);
-    })();
-  }, []);
-
-   */
+  // Usage : Check if the token is valid / cf useAuthorization hook
   const isAuthorized = async () => {
     try {
       const token = localStorage.getItem("token");

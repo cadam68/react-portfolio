@@ -1,8 +1,21 @@
 import React, { useEffect } from "react";
 import styles from "./ContactUs.module.css";
 import ContactDetail from "../components/inLine/ContactDetail";
+import useAuthorization from "../hooks/useAuthorization";
+import { useAuthContext } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const ContactUs = () => {
+  const { user, logout } = useAuthContext();
+  const navigate = useNavigate();
+
+  /* Example of local protected page
+  const isAuthorized = useAuthorization(() => {
+    if (user) logout();
+    navigate("/home");
+  });
+  /* */
+
   return (
     <div className={"inline-section"}>
       <div className={"inline-banner"}>
