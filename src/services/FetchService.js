@@ -127,8 +127,8 @@ const FetchService = () => {
       body: JSON.stringify({ userid, password }),
     });
 
-    const data = await res.json();
     if (!res.ok) throw new Error(data.message || "Something went wrong with fetching login");
+    const data = await res.json();
     return data;
   };
 
@@ -149,7 +149,29 @@ const FetchService = () => {
     }
   };
 
-  return { downloadFile, fetchDownloadUrl, fetchDownloadJson, fetchMarkdownFile, fetchPortfolioList, fetchPortfolio, login, isAuthorized };
+  const refreshToken = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return false;
+
+      const res = await fetch(`${settings.baseApiUrl}/auth/refreshToken`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-Key": settings.apiKey,
+          Authorization: token,
+        },
+      });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      localStorage.setItem("token", data.token);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  return { downloadFile, fetchDownloadUrl, fetchDownloadJson, fetchMarkdownFile, fetchPortfolioList, fetchPortfolio, login, isAuthorized, refreshToken };
 };
 
 export { FetchService };

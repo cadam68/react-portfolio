@@ -10,4 +10,5 @@ export const settings = {
   downloadTypes: ["card", "video", "carousel", "file", "url"],
   availableLanguages: { fr: "🇫🇷", en: "🇺🇸", de: "🇩🇪", es: "🇪🇸" },
   appName: "portfolio",
+  refreshTokenInterval: 15 * 60, // set to 0 to disable the refreshToken feature
 };

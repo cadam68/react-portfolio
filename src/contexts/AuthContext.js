@@ -1,9 +1,10 @@
-import React, { createContext, useState, useEffect, useContext, useReducer, useMemo } from "react";
+import React, { createContext, useState, useEffect, useContext, useRef } from "react";
 import { jwtDecode } from "jwt-decode";
 import PropTypes from "prop-types";
 import { FetchService } from "../services/FetchService";
 import { Log } from "../services/LogService";
 import { useToast } from "./ToastContext";
+import { settings } from "../Settings";
 
 const logger = Log("AuthContext");
 
@@ -16,20 +17,7 @@ const AuthContext = createContext({
 const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState();
   const { Toast } = useToast();
-
-  useEffect(() => {
-    // Check if there's a token in localStorage on initial load
-    const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        const decodedToken = jwtDecode(token);
-        setUser({ userid: decodedToken.userid, name: decodedToken.name, role: decodedToken.role });
-      } catch (error) {
-        logger.error("Invalid token found in local storage, clearing it.");
-        localStorage.removeItem("token");
-      }
-    }
-  }, []);
+  const intervalIdRef = useRef(null);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -60,6 +48,43 @@ const AuthContextProvider = ({ children }) => {
       return false; // Signal that login failed
     }
   };
+
+  const refreshToken = async () => {
+    const r = await FetchService().refreshToken();
+    logger.debug(`Token is ${r ? "" : "NOT"} refreshed`);
+  };
+
+  useEffect(() => {
+    // Check if there's a token in localStorage on initial load
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setUser({ userid: decodedToken.userid, name: decodedToken.name, role: decodedToken.role });
+      } catch (error) {
+        logger.error("Invalid token found in local storage, clearing it.");
+        localStorage.removeItem("token");
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (settings.refreshTokenInterval >= 0) {
+      if (user) {
+        intervalIdRef.current = setInterval(refreshToken, settings.refreshTokenInterval * 1000);
+      } else if (intervalIdRef.current) {
+        clearInterval(intervalIdRef.current);
+        intervalIdRef.current = null;
+      }
+
+      return () => {
+        if (intervalIdRef.current) {
+          clearInterval(intervalIdRef.current);
+          intervalIdRef.current = null;
+        }
+      };
+    }
+  }, [user]);
 
   return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
 };

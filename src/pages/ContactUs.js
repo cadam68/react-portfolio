@@ -36,6 +36,7 @@ const ContactUs = () => {
         </div>
         <div className={styles.contactMap}>
           <iframe
+            title="Contact Map"
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d43001.92179893415!2d7.443024290339176!3d47.652948591786334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479197d902dfa607%3A0xccf826b31c92af97!2s68510%20Sierentz!5e0!3m2!1sfr!2sfr!4v1723798565855!5m2!1sfr!2sfr"
             width="100%"
             height="450"
