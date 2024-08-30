@@ -12,6 +12,7 @@ import InLine from "./pages/InLine";
 import AdminPage from "./pages/AdminPage";
 import PrivateRoute from "./components/system/PrivateRoute";
 import Login from "./pages/Login";
+import AdminPortfolioPage from "./pages/AdminPortfolioPage";
 
 const App = () => {
   const { debug } = useDebugContext();
@@ -41,6 +42,14 @@ const App = () => {
                 element={
                   <PrivateRoute role="admin" loginPath={"/login"}>
                     <AdminPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path={"admin/portfolio/:userId"}
+                element={
+                  <PrivateRoute role="admin" loginPath={"/login"}>
+                    <AdminPortfolioPage />
                   </PrivateRoute>
                 }
               />

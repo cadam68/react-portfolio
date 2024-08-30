@@ -44,6 +44,7 @@ const AdminPage = () => {
   ];
 
   const handleRowClick = async id => {
+    /*
     await requestConfirm(
       <div className={"inline-popup"}>
         <div>
@@ -52,6 +53,8 @@ const AdminPage = () => {
       </div>,
       [{ label: "Close", value: true }]
     );
+    */
+    navigate(`portfolio/${id}`);
   };
 
   if (!data) return <SpinnerFullPage />;
