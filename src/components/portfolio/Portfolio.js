@@ -53,18 +53,17 @@ const Portfolio = () => {
         let { param_lg, param_itemId } = payload;
         let lg = param_itemId ? param_lg : i18n.resolvedLanguage;
         let itemId = param_itemId ? param_itemId : param_lg;
-        const uniqueIds = [...new Set(portfolio?.downloadUrls.map((item) => item.id))];
-        let items = uniqueIds.map((id) => {
-          const entries = portfolio?.downloadUrls.filter((item) => item.id === id);
+        const uniqueIds = [...new Set(portfolio?.downloadUrls.map(item => item.id))];
+        let items = uniqueIds.map(id => {
+          const entries = portfolio?.downloadUrls.filter(item => item.id === id);
           // return entries.find((item) => item.lg === lg) || entries[0];
-          let entry = entries.find((item) => item.lg === lg) || entries[0];
+          let entry = entries.find(item => item.lg === lg) || entries[0];
           entry.label = i18n.t(`title_${entry.id}`, { lng: lg, defaultValue: S(entry.id.replace(/[^a-zA-Z0-9]/g, " ")).titleCase().s });
           return entry;
         });
 
         if (!settings?.visited?.includes(userId)) itemId = "[firstTime]";
-        if (!uniqueIds.includes(itemId) || !items.find((item) => item.id === itemId && renderItemsTypes.includes(item.type)))
-          itemId = items.find((item) => renderItemsTypes.includes(item.type))?.id;
+        if (!uniqueIds.includes(itemId) || !items.find(item => item.id === itemId && renderItemsTypes.includes(item.type))) itemId = items.find(item => renderItemsTypes.includes(item.type))?.id;
         return { ...initialState, lg, itemId, items };
       }
 
@@ -105,7 +104,7 @@ const Portfolio = () => {
 
   useEffect(() => {
     if (!state.items) return;
-    const selectedItem = state.items.find((item) => item.id === state.itemId);
+    const selectedItem = state.items.find(item => item.id === state.itemId);
     setVideoUrl(selectedItem?.type === "video" ? selectedItem.url : null);
     setCardUrl(selectedItem?.type === "card" ? selectedItem.url : null);
     setCarousel(selectedItem?.type === "carousel" ? selectedItem.data : null);
@@ -143,7 +142,7 @@ const Portfolio = () => {
 
   const downloadFileHandler = async (fileUrl, fileName) => {
     try {
-      await FetchService().downloadFile(fileUrl, fileName);
+      await FetchService().getDownloadFile(fileUrl, fileName);
       Toast.info(`The file ${fileName} is downloaded`);
     } catch (error) {
       Toast.error(`The file ${fileName} is not available yet!`);
@@ -160,8 +159,8 @@ const Portfolio = () => {
       <PortfolioHeader />
       <section className={styles.navigation}>
         {state.items
-          .filter((item) => item.type && !/^\[.*\]$/.test(item.id))
-          .map((item) => (
+          .filter(item => item.type && !/^\[.*\]$/.test(item.id))
+          .map(item => (
             <Button
               className={`button-outline button-small ${state.itemId === item.id ? "disabled" : ""}`}
               key={item.id}
@@ -173,8 +172,7 @@ const Portfolio = () => {
                   // window.location.href = `${settings.baseApiUrl}/firebase/download?url=${encodeURIComponent(item.url)}`;
                   downloadFileHandler(item.url, item.target.split("/").pop());
                 } else if (item.type === "url") window.open(item.url, "_blank", "noopener,noreferrer");
-              }}
-            >
+              }}>
               {item.label}
             </Button>
           ))}
@@ -185,7 +183,7 @@ const Portfolio = () => {
           <meta name="description" content={`Learn more about ${portfolio.name}`} />
           <meta name="keywords" content={`${portfolio.name}, ${portfolio.subTitle}`} />
         </Helmet>
-        <h2>{state.items.find((item) => item.id === state.itemId)?.label}</h2>
+        <h2>{state.items.find(item => item.id === state.itemId)?.label}</h2>
         {videoUrl && (
           <div className={styles.videoWrapper} onMouseEnter={videoHandler.bind(this, "ShowControls")} onMouseLeave={videoHandler.bind(this, "HideControls")}>
             <ReactPlayer

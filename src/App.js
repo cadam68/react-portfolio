@@ -13,6 +13,8 @@ import AdminPage from "./pages/AdminPage";
 import PrivateRoute from "./components/system/PrivateRoute";
 import Login from "./pages/Login";
 import AdminPortfolioPage from "./pages/AdminPortfolioPage";
+import { setLogLevel, setLogOn } from "./services/LogService";
+import { useEffect } from "react";
 
 const App = () => {
   const { debug } = useDebugContext();
@@ -20,6 +22,12 @@ const App = () => {
     isReady,
     confirmService: { ConfirmModalComponent },
   } = useAppContext();
+
+  useEffect(() => {
+    window.setLogLevel = setLogLevel;
+    window.setLogOn = setLogOn;
+    console.clear();
+  }, []);
 
   return (
     <BrowserRouter>

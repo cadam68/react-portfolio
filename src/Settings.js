@@ -10,5 +10,7 @@ export const settings = {
   downloadTypes: ["card", "video", "carousel", "file", "url"],
   availableLanguages: { fr: "🇫🇷", en: "🇺🇸", de: "🇩🇪", es: "🇪🇸" },
   appName: "portfolio",
-  refreshTokenInterval: 15 * 60, // set to 0 to disable the refreshToken feature
+  refreshTokenInterval: 15, // Interval in min, set to 0 to disable the refreshToken feature
+  documentMaxSize: 5 * 1024 * 1024, // Maximum uploaded file size in bytes (5 MB in this case)
+  documentAllowedExtensions: ["pdf", "jpg", "png", "mp4", "card", "carousel.json"], // Allowed file extensions
 };

@@ -1,6 +1,10 @@
 import { Log } from "./LogService";
 import i18next from "i18next";
 import { settings } from "../Settings";
+import Ajv from "ajv";
+import addFormats from "ajv-formats";
+const ajv = new Ajv({ allErrors: true });
+addFormats(ajv);
 
 export const t = (key, params) => {
   return i18next.t(key, params);
@@ -11,7 +15,7 @@ export const handleFormikFieldChange = (formikProps, format = null, e) => {
   const alphaRegex = /alpha\[(\d+)]/;
   const alphaNumRegex = /alphaNum\[(\d+)]/;
 
-  const clearError = (errorName) => {
+  const clearError = errorName => {
     if (formikProps.errors.hasOwnProperty(errorName)) {
       const newErrors = { ...formikProps.errors };
       delete newErrors[errorName];
@@ -55,7 +59,7 @@ export const handleFormikFieldBlur = ({ handleBlur }, callback, e) => {
 
 // Function to change the filter property of the ::before pseudo-element
 // Usage : changeBeforeFilter('hue-rotate(180deg) saturate(1.5)');
-export const changeBeforeFilter = (filterValue) => {
+export const changeBeforeFilter = filterValue => {
   // Check if the style element already exists
   const styleId = "custom-filter-style";
   let style = document.getElementById(styleId);
@@ -72,7 +76,7 @@ export const changeBeforeFilter = (filterValue) => {
   style.innerHTML = `.container::before { filter: ${filterValue}; }`;
 };
 
-export const changeTheme = (newTheme) => {
+export const changeTheme = newTheme => {
   // Access the root element
   const root = document.documentElement;
   const randomPalette = generateColorPalette();
@@ -86,7 +90,7 @@ export const changeTheme = (newTheme) => {
   root.style.setProperty("--font-family", newTheme?.fontFamily ? newTheme?.fontFamily : themes.light.fontFamily);
 };
 
-export const changeFontFamily = (newFontFamily) => {
+export const changeFontFamily = newFontFamily => {
   const root = document.documentElement;
   root.style.setProperty("--font-family", newFontFamily ? newFontFamily : "white");
 };
@@ -146,9 +150,9 @@ export const themes = {
   random: null,
 };
 
-export const capitalizeAfterPeriod = (inputString) => {
+export const capitalizeAfterPeriod = inputString => {
   inputString = inputString.trim().replace(/\s+/g, " ").replace(/\s\./g, ".");
-  return inputString.charAt(0).toUpperCase() + inputString.slice(1).replace(/\.\s[a-z]/g, (match) => match.toUpperCase());
+  return inputString.charAt(0).toUpperCase() + inputString.slice(1).replace(/\.\s[a-z]/g, match => match.toUpperCase());
 };
 
 // const rgbaColor = hslToRgba(210, 100, 50, 0.5); // Converts HSL(210, 100%, 50%) to RGBA
@@ -156,9 +160,9 @@ const hslToRgba = (h, s, l, a = 1) => {
   s /= 100;
   l /= 100;
 
-  const k = (n) => (n + h / 30) % 12;
+  const k = n => (n + h / 30) % 12;
   const a2 = s * Math.min(l, 1 - l);
-  const f = (n) => l - a2 * Math.max(Math.min(k(n) - 3, 9 - k(n), 1), -1);
+  const f = n => l - a2 * Math.max(Math.min(k(n) - 3, 9 - k(n), 1), -1);
 
   const r = Math.round(255 * f(0));
   const g = Math.round(255 * f(8));
@@ -177,7 +181,7 @@ export const hsl2Rgba = (hslString, a = 1) => {
   return null;
 };
 
-export const getLastExpenseDate = (expenses, reverse = false) => [...new Set(expenses.map((item) => item.date))].sort((a, b) => a - b).at(reverse ? -1 : 0) || new Date();
+export const getLastExpenseDate = (expenses, reverse = false) => [...new Set(expenses.map(item => item.date))].sort((a, b) => a - b).at(reverse ? -1 : 0) || new Date();
 
 export const setFieldRefValue = (fieldRef, value) => {
   Log().debug(`set element[name='${fieldRef?.name}', tagName='${fieldRef?.tagName}'].value=[${value}]`);
@@ -248,7 +252,7 @@ export class Queue {
   }
 }
 
-export const getFilteredLanguages = (downloadReferences) => {
+export const getFilteredLanguages = downloadReferences => {
   if (!downloadReferences) return;
   const uniqueLgValues = downloadReferences.reduce((acc, item) => {
     if (item.lg && !acc.includes(item.lg)) {
@@ -257,7 +261,7 @@ export const getFilteredLanguages = (downloadReferences) => {
     return acc;
   }, []);
   const filteredLanguages = Object.keys(settings.availableLanguages)
-    .filter((key) => uniqueLgValues.includes(key))
+    .filter(key => uniqueLgValues.includes(key))
     .reduce((obj, key) => {
       obj[key] = settings.availableLanguages[key];
       return obj;
@@ -267,15 +271,15 @@ export const getFilteredLanguages = (downloadReferences) => {
 
 export const sortAndLimitPortfolioItems = (items, limit = 100) => {
   // Shuffle both VIP and non-VIP items
-  const shuffle = (array) => {
+  const shuffle = array => {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
     }
   };
   // Separate VIP and non-VIP items
-  const vipItems = items.filter((item) => item.role.includes("VIP"));
-  const nonVipItems = items.filter((item) => !item.role.includes("VIP"));
+  const vipItems = items.filter(item => item.role.includes("VIP"));
+  const nonVipItems = items.filter(item => !item.role.includes("VIP"));
   shuffle(nonVipItems);
 
   // Insert all VIP items within the first 100 positions
@@ -292,6 +296,67 @@ export const sortAndLimitPortfolioItems = (items, limit = 100) => {
   return result;
 };
 
-export const removeDiacritics = (str) => {
+export const removeDiacritics = str => {
   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+};
+
+export const validateSchema = jsonObj => {
+  const schemas = {
+    profile: {
+      $schema: "http://json-schema.org/draft-07/schema#",
+      type: "object",
+      properties: {
+        userId: { type: "string", pattern: "^[a-zA-Z0-9_-]+$" },
+        name: { type: "string", minLength: 1 },
+        email: { type: ["string", "null"], format: "email" },
+        title: { type: "string", minLength: 1 },
+        subTitle: { type: ["string", "null"], minLength: 1 },
+        downloadReferences: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              id: { type: "string", pattern: "^[\\w\\[\\]-]+$" },
+              lg: { type: ["string", "null"], enum: ["en", "fr", "de", null] },
+              type: { type: "string", enum: ["card", "video", "carousel", "file", "url"] },
+              target: { type: "string", pattern: "^(firebase:\\/\\/.+\\.(card|mp4|json|pdf)|https?:\\/\\/\\S+)$" },
+            },
+            required: ["id", "type", "target"],
+            additionalProperties: false,
+          },
+        },
+        palette: {
+          type: ["object", "null"],
+          properties: {
+            colorLightest: { type: "string" },
+            colorLight: { type: "string" },
+            colorMedium: { type: "string" },
+            colorDark: { type: "string" },
+            colorBackground: { type: "string" },
+            fontFamily: { type: "string" },
+          },
+          required: ["colorLightest", "colorLight", "colorMedium", "colorDark", "colorBackground"],
+          additionalProperties: false,
+        },
+      },
+      required: ["userId", "name", "email", "title", "subTitle", "downloadReferences"],
+      additionalProperties: false,
+    },
+  };
+
+  const validate = ajv.compile(schemas.profile);
+  const valid = validate(jsonObj);
+  if (!valid) {
+    const errorString = validate.errors.map(err => `${err.instancePath} ${err.message}`).join("; ");
+    throw new Error(`Invalid profile schema: ${errorString}`);
+  }
+};
+
+export const copyToClipboard = async text => {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch (err) {
+    return false;
+  }
 };

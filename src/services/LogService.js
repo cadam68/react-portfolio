@@ -13,7 +13,7 @@ const LogLevel = Object.freeze({
 let currentLogLevel = LogLevel.INFO; // Default log level
 let isLogOn = false;
 
-const getLogLevelText = (levelValue) => {
+const getLogLevelText = levelValue => {
   return Object.keys(LogLevel).reduce((found, key) => {
     if (LogLevel[key] === levelValue) return key;
     return found;
@@ -78,8 +78,8 @@ const log = (message, level = -1, module) => {
       case LogLevel.FATAL:
       case LogLevel.ERROR:
         fetchLog(level, module, message)
-          .then((status) => {})
-          .catch((err) => console.error(`[${currentTime}][E][LogService] ${err.message}`));
+          .then(status => {})
+          .catch(err => console.error(`[${currentTime}][E][LogService] ${err.message}`));
         break;
       default:
         break;
@@ -87,13 +87,13 @@ const log = (message, level = -1, module) => {
   }
 };
 
-const Log = (module) => ({
-  console: (text) => log(text, -1, module),
-  debug: (text) => log(text, LogLevel.DEBUG, module),
-  info: (text) => log(text, LogLevel.INFO, module),
-  warn: (text) => log(text, LogLevel.WARNING, module),
-  error: (text) => log(text, LogLevel.ERROR, module),
-  fatal: (text) => log(text, LogLevel.FATAL, module),
+const Log = module => ({
+  console: text => log(text, -1, module),
+  debug: text => log(text, LogLevel.DEBUG, module),
+  info: text => log(text, LogLevel.INFO, module),
+  warn: text => log(text, LogLevel.WARNING, module),
+  error: text => log(text, LogLevel.ERROR, module),
+  fatal: text => log(text, LogLevel.FATAL, module),
 });
 
 export { Log, log, LogLevel, setLogLevel, setLogOn };

@@ -43,11 +43,11 @@ const fetchAllDownloadUrls = async (downloadReferences, pid, abortCtrl) => {
           let downloadUrl = item.target;
           let data;
           if (item.target.startsWith(firebaseBaseUrl)) {
-            downloadUrl = await FetchService().fetchDownloadUrl(item.target.substring(firebaseBaseUrl.length), pid, abortCtrl);
+            downloadUrl = await FetchService().getDownloadUrl(item.target.substring(firebaseBaseUrl.length), pid, abortCtrl);
             if (!downloadUrl) return undefined;
 
             if (["carousel"].includes(item.type)) {
-              data = await FetchService().fetchDownloadJson(downloadUrl, abortCtrl);
+              data = await FetchService().getDownloadJson(downloadUrl, abortCtrl);
               if (!data) return undefined;
             }
           }
@@ -99,12 +99,12 @@ const AppContextProvider = ({ children }) => {
       try {
         logger.info(`loading portfolio for userId ${pid}`);
         // check if portfolio exists in database & increment nbVisit
-        let data = await FetchService().fetchPortfolio(pid, "INC_VISITED", abortCtrl);
+        let data = await FetchService().getPortfolio(pid, "INC_VISITED", abortCtrl);
         if (!data) throw new Error(`Portfolio for userId ${pid} not available`);
         //
-        let urlProfile = await FetchService().fetchDownloadUrl(`${pid}.profile.json`, pid, abortCtrl);
+        let urlProfile = await FetchService().getDownloadUrl(`${pid}.profile.json`, pid, abortCtrl);
         logger.info("urlProfile", urlProfile);
-        let portfolioData = await FetchService().fetchDownloadJson(urlProfile, abortCtrl);
+        let portfolioData = await FetchService().getDownloadJson(urlProfile, abortCtrl);
         let downloadUrls = await fetchAllDownloadUrls(portfolioData.downloadReferences, pid, abortCtrl);
         portfolioData.downloadUrls = downloadUrls;
         setPortfolio(portfolioData);

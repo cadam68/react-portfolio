@@ -71,7 +71,7 @@ const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     if (settings.refreshTokenInterval >= 0) {
       if (user) {
-        intervalIdRef.current = setInterval(refreshToken, settings.refreshTokenInterval * 1000);
+        intervalIdRef.current = setInterval(refreshToken, settings.refreshTokenInterval * 60000);
       } else if (intervalIdRef.current) {
         clearInterval(intervalIdRef.current);
         intervalIdRef.current = null;

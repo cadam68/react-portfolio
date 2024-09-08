@@ -20,7 +20,7 @@ const AdminPage = () => {
     const fetchData = async controller => {
       const signal = controller.signal;
       try {
-        const data = await FetchService().fetchPortfolioList(true, signal);
+        const data = await FetchService().getPortfolioList(true, signal);
         setData(data);
       } catch (err) {
         Toast.error("Session Timeout!");

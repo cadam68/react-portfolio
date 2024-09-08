@@ -4,7 +4,7 @@ import { removeDiacritics } from "../../services/Helper";
 
 const SortableTable = ({ data, headers, itemsPerPage, displaySearch, keyAttribute, onRowClick }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortColumn, setSortColumn] = useState(headers.find((header) => header.sortable)?.key || "");
+  const [sortColumn, setSortColumn] = useState(headers.find(header => header.sortable)?.key || "");
   const [sortDirection, setSortDirection] = useState("asc");
 
   /* NOTE : PROPS should be IMMUTABLE, create a shallow copy of the array with copied objects if needed
@@ -31,7 +31,7 @@ const SortableTable = ({ data, headers, itemsPerPage, displaySearch, keyAttribut
   };
 
   // Handle sorting logic
-  const handleSort = (columnKey) => {
+  const handleSort = columnKey => {
     if (sortColumn === columnKey) {
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
@@ -49,7 +49,7 @@ const SortableTable = ({ data, headers, itemsPerPage, displaySearch, keyAttribut
   }, [data, keyAttribute]);
 
   const filteredData = useMemo(() => {
-    return data.filter((item) => {
+    return data.filter(item => {
       // Concatenate only the fields defined in the headers
       const itemString = headers.reduce((acc, header) => {
         const fieldValue = item[header.key] != null ? String(item[header.key]) : "";
@@ -87,21 +87,13 @@ const SortableTable = ({ data, headers, itemsPerPage, displaySearch, keyAttribut
       {displaySearch && (
         <p>
           Search For &nbsp;
-          <input
-            type="text"
-            name="searchCriteria"
-            placeholder="Value"
-            value={inputValues.searchCriteria}
-            size={21}
-            maxLength={15}
-            onChange={(e) => handleInputChange(e, /^[A-Z]*$/)}
-          />
+          <input type="text" name="searchCriteria" placeholder="Value" value={inputValues.searchCriteria} size={21} maxLength={15} onChange={e => handleInputChange(e, /^[A-Z]*$/)} />
         </p>
       )}
       <table>
         <thead>
           <tr>
-            {headers.map((header) => (
+            {headers.map(header => (
               <th key={header.key} onClick={() => header.sortable && handleSort(header.key)} style={{ cursor: header.sortable ? "pointer" : "default", width: header.width }}>
                 {header.name} {header.sortable && (sortColumn === header.key ? (sortDirection === "asc" ? "🔼" : "🔽") : "")}
               </th>
@@ -113,9 +105,8 @@ const SortableTable = ({ data, headers, itemsPerPage, displaySearch, keyAttribut
             <tr
               key={validKeyAttribute ? item[validKeyAttribute] : index} // Use validKeyAttribute if available, otherwise fallback to index
               onClick={validKeyAttribute && onRowClick ? () => onRowClick(item[validKeyAttribute]) : null}
-              style={{ cursor: validKeyAttribute && onRowClick ? "pointer" : "default" }}
-            >
-              {headers.map((header) => (
+              style={{ cursor: validKeyAttribute && onRowClick ? "pointer" : "default" }}>
+              {headers.map(header => (
                 <td key={header.key}>{item[header.key]}</td>
               ))}
             </tr>
@@ -123,7 +114,7 @@ const SortableTable = ({ data, headers, itemsPerPage, displaySearch, keyAttribut
         </tbody>
       </table>
       <div>
-        <button onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} disabled={isPreviousDisabled}>
+        <button onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={isPreviousDisabled}>
           Previous
         </button>
         <button onClick={() => setCurrentPage(1)} disabled={isPreviousDisabled}>
@@ -132,7 +123,7 @@ const SortableTable = ({ data, headers, itemsPerPage, displaySearch, keyAttribut
         <span>
           {currentPage} of {totalPages}
         </span>
-        <button onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} disabled={isNextDisabled}>
+        <button onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={isNextDisabled}>
           Next
         </button>
       </div>

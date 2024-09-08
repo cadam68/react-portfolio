@@ -9,7 +9,7 @@ const MarkdownDisplay = ({ filePath }) => {
 
   useEffect(() => {
     const loadContent = async () => {
-      const markdownContent = await FetchService().fetchMarkdownFile(filePath);
+      const markdownContent = await FetchService().getMarkdownFile(filePath);
       setContent(markdownContent);
     };
 

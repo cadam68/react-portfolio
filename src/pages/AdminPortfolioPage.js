@@ -1,68 +1,32 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { Log } from "../services/LogService";
 import { useAppContext } from "../contexts/AppContext";
 import { FetchService } from "../services/FetchService";
 import { useToast } from "../contexts/ToastContext";
-import Ajv from "ajv";
-import addFormats from "ajv-formats";
+import { settings } from "../Settings";
+import styles from "./AdminPortfolioPage.module.css";
+import { copyToClipboard, validateSchema } from "../services/Helper";
 
-const ajv = new Ajv({ allErrors: true });
-addFormats(ajv);
 const logger = Log("AdminPortfolio");
 
 const AdminPortfolioPage = () => {
+  const { portfolioList } = useOutletContext();
   const { userId } = useParams();
+  const [userName, setUserName] = useState();
+  const [documentList, setDocumentList] = useState([]);
+  const [refreshDocumentList, setRefreshDocumentList] = useState(true);
   const [inputValues, setInputValues] = useState({ jsonData: "" });
-  const [error, setError] = useState("");
+  const [errorProfile, setErrorProfile] = useState("");
+  const [errorUpload, setErrorUpload] = useState("");
+  const [hasChanged, setHasChanged] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const fileInputRef = useRef(null);
   const {
     confirmService: { requestConfirm },
   } = useAppContext();
   const navigate = useNavigate();
   const { Toast } = useToast();
-
-  const schemas = {
-    profile: {
-      $schema: "http://json-schema.org/draft-07/schema#",
-      type: "object",
-      properties: {
-        userId: { type: "string", pattern: "^[a-zA-Z0-9_-]+$" },
-        name: { type: "string", minLength: 1 },
-        email: { type: ["string", "null"], format: "email" },
-        title: { type: "string", minLength: 1 },
-        subTitle: { type: ["string", "null"], minLength: 1 },
-        downloadReferences: {
-          type: "array",
-          items: {
-            type: "object",
-            properties: {
-              id: { type: "string", pattern: "^[\\w\\[\\]-]+$" },
-              lg: { type: ["string", "null"], enum: ["en", "fr", "de", null] },
-              type: { type: "string", enum: ["card", "video", "carousel", "file", "url"] },
-              target: { type: "string", pattern: "^(firebase:\\/\\/.+\\.(card|mp4|json|pdf)|https?:\\/\\/\\S+)$" },
-            },
-            required: ["id", "type", "target"],
-            additionalProperties: false,
-          },
-        },
-        palette: {
-          type: ["object", "null"],
-          properties: {
-            colorLightest: { type: "string" },
-            colorLight: { type: "string" },
-            colorMedium: { type: "string" },
-            colorDark: { type: "string" },
-            colorBackground: { type: "string" },
-            fontFamily: { type: "string" },
-          },
-          required: ["colorLightest", "colorLight", "colorMedium", "colorDark", "colorBackground"],
-          additionalProperties: false,
-        },
-      },
-      required: ["userId", "name", "email", "title", "subTitle", "downloadReferences"],
-      additionalProperties: false,
-    },
-  };
 
   // load portfolio
   useEffect(() => {
@@ -71,10 +35,9 @@ const AdminPortfolioPage = () => {
     const fetchPortfolio = async id => {
       try {
         logger.info(`loading portfolio for userId ${id}`);
-        const urlProfile = await FetchService().fetchDownloadUrl(`${id}.profile.json`, id, abortCtrl);
+        const urlProfile = await FetchService().getDownloadUrl(`${id}.profile.json`, id, abortCtrl);
         if (!urlProfile) throw new Error(`Portfolio for userId ${id} not available`);
-        logger.info("urlProfile", urlProfile);
-        const portfolioData = await FetchService().fetchDownloadJson(urlProfile, abortCtrl);
+        const portfolioData = await FetchService().getDownloadJson(urlProfile, abortCtrl);
         setInputValues({ jsonData: JSON.stringify(portfolioData, null, 2) });
       } catch (e) {
         console.error(e);
@@ -91,6 +54,8 @@ const AdminPortfolioPage = () => {
     };
 
     if (userId) {
+      const userData = portfolioList?.find(item => item.userid === userId);
+      setUserName(userData?.name);
       logger.info(`fetch portfolio(portfolioId=[${userId}])...`);
       fetchPortfolio(userId);
     }
@@ -100,7 +65,27 @@ const AdminPortfolioPage = () => {
     };
   }, [userId, navigate, requestConfirm]);
 
+  useEffect(() => {
+    const abortCtrl = new AbortController();
+
+    const fetchPortfolioDocumentList = async id => {
+      try {
+        logger.info(`loading portfolioDocumentList for userId ${id}`);
+        const data = await FetchService().getPortfolioDocumentList(id, abortCtrl);
+        setDocumentList(data);
+        setRefreshDocumentList(false);
+      } catch (_) {}
+    };
+
+    if (userId && refreshDocumentList) fetchPortfolioDocumentList(userId);
+
+    return () => {
+      abortCtrl.abort();
+    };
+  }, [userId, refreshDocumentList]);
+
   const handleInputChange = (e, regex = /.*/) => {
+    if (!hasChanged) setHasChanged(true);
     const { name, value } = e.target;
     if (regex.test(value)) {
       setInputValues({
@@ -108,7 +93,7 @@ const AdminPortfolioPage = () => {
         [name]: value,
       });
     } else {
-      setError(`Invalid input for ${name}`);
+      setErrorProfile(`Invalid input for ${name}`);
     }
   };
 
@@ -116,37 +101,113 @@ const AdminPortfolioPage = () => {
     event.preventDefault();
     try {
       const updatedJson = JSON.parse(inputValues.jsonData);
-      const validate = ajv.compile(schemas.profile);
-      const valid = validate(updatedJson);
-      if (!valid) {
-        const errorString = validate.errors.map(err => `${err.instancePath} ${err.message}`).join("; ");
-        throw new Error(`Invalid profile schema: ${errorString}`);
-      }
+      validateSchema(updatedJson);
+      const jsonData = JSON.stringify(updatedJson, null, 2);
+      const res = await FetchService().savePortfolio(userId, jsonData);
+      if (!res) throw new Error(`Invalid profile`);
 
-      setInputValues({ jsonData: JSON.stringify(updatedJson, null, 2) });
-      setError("");
+      setInputValues({ jsonData: jsonData });
+      setErrorProfile("");
+      setHasChanged(false);
       Toast.info(`Portfolio for userid ${userId} saved`);
     } catch (e) {
-      setError(e.message || "Invalid profile format");
+      setErrorProfile(e.message || "Invalid profile format");
     }
   };
 
-  if (!userId) return null;
+  const handleFileChange = event => {
+    const file = event.target.files[0];
+
+    if (file) {
+      const isValidFileType = settings.documentAllowedExtensions.some(fileExtension => file.name.endsWith(fileExtension));
+      if (file.size > settings.documentMaxSize) {
+        setErrorUpload(`File size exceeds the maximum limit of ${settings.documentMaxSize / (1024 * 1024)} MB`);
+        setSelectedFile(null);
+      } else if (!isValidFileType) {
+        setErrorUpload(`Invalid file type. Only ${settings.documentAllowedExtensions.join(", ")} documents are allowed`);
+        setSelectedFile(null);
+      } else {
+        setSelectedFile(file);
+        setErrorUpload("");
+      }
+    }
+  };
+
+  const handleSelectFile = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileUpload = async () => {
+    if (!selectedFile) {
+      setErrorUpload("Please select a valid file first");
+      return;
+    }
+
+    try {
+      const data = await FetchService().uploadPortfolioDocument(selectedFile, userId);
+      if (!data) throw new Error("Sorry, the file can not be uploaded...");
+
+      if (data.message) Toast.info(data.message);
+      setErrorUpload("");
+      setSelectedFile(null);
+      setRefreshDocumentList(true);
+    } catch (error) {
+      setErrorUpload(error.message);
+    }
+  };
+
+  if (!userId || !userName) return null;
 
   return (
     <div className="inline-section">
       <hr />
       <div className="inline-content">
-        <div>
-          <div>Update {userId} Portfolio</div>
+        <div className={styles.adminPortfolio}>
+          <div>{userName} Portfolio Profile</div>
           <div>
-            {<p style={{ color: "red", fontSize: "12px", margin: "0" }}>{error}&nbsp;</p>}
-            <form onSubmit={handleSubmit}>
-              <textarea style={{ width: "100%", height: "400px" }} name="jsonData" value={inputValues.jsonData} onBlur={() => setError("")} onChange={e => handleInputChange(e, /.*/)} />
-              <button type="submit" disabled={!!error || !inputValues.jsonData}>
+            {<p className={styles.error}>{errorProfile}&nbsp;</p>}
+            <form className="inline-form" onSubmit={handleSubmit}>
+              <textarea style={{ width: "100%", height: "400px" }} name="jsonData" value={inputValues.jsonData} onBlur={() => setErrorProfile("")} onChange={e => handleInputChange(e, /.*/)} />
+              <button type="submit" disabled={!!errorProfile || !inputValues.jsonData || !hasChanged}>
                 Save Changes
               </button>
             </form>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <div className="inline-content">
+        <div className={styles.adminPortfolio}>
+          <div>{userName} Portfolio Document(s)</div>
+          <div>
+            <p className={styles.error}>{errorUpload}&nbsp;</p>
+            <div className="inline-form">
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <button onClick={handleFileUpload} disabled={!selectedFile}>
+                  Upload File
+                </button>
+                <button type="button" onClick={handleSelectFile}>
+                  Select a File
+                </button>
+                <span className="input">{selectedFile?.name || "No file selected"}</span>
+                <input type="file" ref={fileInputRef} onChange={handleFileChange} />
+              </div>
+            </div>
+            <div>
+              {documentList?.length > 0 && (
+                <ul className={styles.documentList}>
+                  {documentList.map(item => (
+                    <li
+                      key={item.id}
+                      onClick={async () => {
+                        if (await copyToClipboard(item.url)) Toast.info(`The url of the ${item.name.split("/").pop()} file is copied in the Clipboard`);
+                      }}>
+                      {item.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
         </div>
       </div>
