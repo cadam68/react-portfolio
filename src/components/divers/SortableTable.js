@@ -19,7 +19,7 @@ const SortableTable = ({ data, headers, itemsPerPage, displaySearch, keyAttribut
   });
 
   useEffect(() => {
-    setInputValues({ ...inputValues, searchCriteria: removeDiacritics(searchFor).toUpperCase().split(" ")[0] });
+    setInputValues({ ...inputValues, searchCriteria: removeDiacritics(searchFor).toUpperCase().split(" ")[0].substring(0, 10) });
   }, [searchFor]);
 
   const handleInputChange = (e, regex) => {
@@ -91,7 +91,7 @@ const SortableTable = ({ data, headers, itemsPerPage, displaySearch, keyAttribut
       {displaySearch && (
         <p>
           Search For &nbsp;
-          <input type="text" name="searchCriteria" placeholder="Value" value={inputValues.searchCriteria} size={21} maxLength={15} onChange={e => handleInputChange(e, /^[A-Z]*$/)} />
+          <input type="text" name="searchCriteria" placeholder="Value" value={inputValues.searchCriteria} size={25} maxLength={15} onChange={e => handleInputChange(e, /^[A-Z]*$/)} />
         </p>
       )}
       <table>
