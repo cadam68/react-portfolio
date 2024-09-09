@@ -303,6 +303,12 @@ textarea {
   transition: 0.3s;
 }
 
+input.large {
+  padding: 10px 30px;
+  margin: 10px 5px;
+  width: auto;
+}
+
 input[type='file'] {
   display: none
 }

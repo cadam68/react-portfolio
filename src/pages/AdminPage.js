@@ -6,9 +6,13 @@ import { FetchService } from "../services/FetchService";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
+import styles from "./AdminPortfolioPage.module.css";
+import ltrim from "validator/es/lib/ltrim";
 
 const AdminPage = () => {
   const [data, setData] = useState([]);
+  const [inputValues, setInputValues] = useState({ portfolioName: "" });
+  const [error, setError] = useState("");
   const {
     confirmService: { requestConfirm },
   } = useAppContext();
@@ -57,15 +61,51 @@ const AdminPage = () => {
     navigate(`portfolio/${id}`);
   };
 
+  const handleInputChange = (e, regex) => {
+    let { name, value } = e.target;
+    value = ltrim(value);
+    if (regex.test(value)) setInputValues({ ...inputValues, [name]: value });
+  };
+
+  const handleCreateNewPortfolio = e => {
+    setError("Comming soon...");
+  };
+
+  const resetError = e => {
+    setError("");
+  };
+
   if (!data) return <SpinnerFullPage />;
 
   return (
     <div className={"inline-section"}>
       <hr />
+      <div className={"inline-content inline-form"}>
+        <div className={styles.adminPortfolio}>
+          <p className={styles.error}>{error}&nbsp;</p>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <button disabled={!inputValues.portfolioName} onClick={handleCreateNewPortfolio}>
+              Create New Portfolio
+            </button>
+            <input
+              className={"large"}
+              type="text"
+              name="portfolioName"
+              value={inputValues.portfolioName}
+              placeholder="Portfolio Name"
+              onChange={e => handleInputChange(e, /^.*$/)}
+              onFocus={resetError}
+              size={50}
+              maxLength={40}
+            />
+          </div>
+        </div>
+      </div>
+      <hr />
       <div className={"inline-content"}>
         <div>
           <div>
-            <SortableTable data={data} headers={headers} itemsPerPage={10} displaySearch={true} keyAttribute="userid" onRowClick={handleRowClick} />
+            <SortableTable data={data} headers={headers} itemsPerPage={10} displaySearch={true} keyAttribute="userid" onRowClick={handleRowClick} searchFor={inputValues.portfolioName} />
           </div>
         </div>
       </div>

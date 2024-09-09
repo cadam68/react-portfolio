@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import styles from "./SortableTable.module.css";
 import { removeDiacritics } from "../../services/Helper";
 
-const SortableTable = ({ data, headers, itemsPerPage, displaySearch, keyAttribute, onRowClick }) => {
+const SortableTable = ({ data, headers, itemsPerPage, displaySearch, keyAttribute, onRowClick, searchFor = "" }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortColumn, setSortColumn] = useState(headers.find(header => header.sortable)?.key || "");
   const [sortDirection, setSortDirection] = useState("asc");
@@ -17,6 +17,10 @@ const SortableTable = ({ data, headers, itemsPerPage, displaySearch, keyAttribut
   const [inputValues, setInputValues] = useState({
     searchCriteria: "",
   });
+
+  useEffect(() => {
+    setInputValues({ ...inputValues, searchCriteria: removeDiacritics(searchFor).toUpperCase().split(" ")[0] });
+  }, [searchFor]);
 
   const handleInputChange = (e, regex) => {
     if (currentPage != 1) setCurrentPage(1);
