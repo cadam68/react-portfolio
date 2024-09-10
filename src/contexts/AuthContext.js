@@ -40,13 +40,13 @@ const AuthContextProvider = ({ children }) => {
       localStorage.setItem("token", data.token);
       setUser({ userid: decodedToken.userid, name: decodedToken.name, role: decodedToken.role });
       Toast.info(`Welcome ${decodedToken.name}`);
-
-      return true;
     } catch (err) {
       logger.error(`Error during login : ${err}`);
       logout();
-      return false; // Signal that login failed
+      if (err.message.includes("locked")) throw new Error(err.message);
+      else throw new Error("Login failed. Please check your credentials.");
     }
+    return true;
   };
 
   const refreshToken = async () => {

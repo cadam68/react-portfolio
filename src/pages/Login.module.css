@@ -54,3 +54,8 @@
     font-size: 16px;
     background-color: transparent;
 }
+
+p.errMessage {
+    color: red;
+    margin-bottom: 10px;
+}

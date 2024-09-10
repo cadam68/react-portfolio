@@ -192,8 +192,8 @@ const FetchService = () => {
       body: JSON.stringify({ userid, password }),
     });
 
-    if (!res.ok) throw new Error(data.message || "Something went wrong with fetching login");
     const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Something went wrong with fetching login");
     return data;
   };
 
