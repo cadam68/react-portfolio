@@ -23,14 +23,13 @@ const Login = () => {
 
   const handleLogin = async e => {
     e.preventDefault();
-    const success = await login(credentials.userid, credentials.password);
-
-    if (success) {
+    try {
+      await login(credentials.userid, credentials.password);
       const from = location.state?.from?.pathname;
       if (from) navigate(from, { replace: true });
       else navigate(-1);
-    } else {
-      setError("Login failed. Please check your credentials.");
+    } catch (e) {
+      setError(e.message);
     }
   };
 
@@ -52,7 +51,7 @@ const Login = () => {
                 <FaLock className={styles.inputIcon} />
                 <input type="password" name="password" value={credentials.password} onChange={e => handleInputChange(e, /.*/)} placeholder="Password" required />
               </div>
-              {error && <p style={{ color: "red" }}>{error}</p>}
+              {error && <p className={styles.errMessage}>{error}</p>}
               <button type="submit" className={styles.loginButton}>
                 LOGIN
               </button>
