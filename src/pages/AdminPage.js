@@ -12,7 +12,6 @@ import ltrim from "validator/es/lib/ltrim";
 const AdminPage = () => {
   const [data, setData] = useState([]);
   const [inputValues, setInputValues] = useState({ portfolioName: "" });
-  const [error, setError] = useState("");
   const {
     confirmService: { requestConfirm },
   } = useAppContext();
@@ -48,16 +47,6 @@ const AdminPage = () => {
   ];
 
   const handleRowClick = async id => {
-    /*
-    await requestConfirm(
-      <div className={"inline-popup"}>
-        <div>
-          Perform custom action with userid <em>{id}</em>
-        </div>
-      </div>,
-      [{ label: "Close", value: true }]
-    );
-    */
     navigate(`portfolio/${id}`);
   };
 
@@ -67,12 +56,8 @@ const AdminPage = () => {
     if (regex.test(value)) setInputValues({ ...inputValues, [name]: value });
   };
 
-  const handleCreateNewPortfolio = e => {
-    setError("Comming soon...");
-  };
-
-  const resetError = e => {
-    setError("");
+  const handleCreateNewPortfolio = async e => {
+    await requestConfirm(<span>Coming soon...</span>, [{ label: ":)", value: true }]);
   };
 
   if (!data) return <SpinnerFullPage />;
@@ -82,22 +67,11 @@ const AdminPage = () => {
       <hr />
       <div className={"inline-content inline-form"}>
         <div className={styles.adminPortfolio}>
-          <p className={styles.error}>{error}&nbsp;</p>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <button disabled={!inputValues.portfolioName} onClick={handleCreateNewPortfolio}>
               Create New Portfolio
             </button>
-            <input
-              className={"large"}
-              type="text"
-              name="portfolioName"
-              value={inputValues.portfolioName}
-              placeholder="Portfolio Name"
-              onChange={e => handleInputChange(e, /^.*$/)}
-              onFocus={resetError}
-              size={50}
-              maxLength={40}
-            />
+            <input className={"large"} type="text" name="portfolioName" value={inputValues.portfolioName} placeholder="Portfolio Name" onChange={e => handleInputChange(e, /^.*$/)} size={50} maxLength={40} />
           </div>
         </div>
       </div>
