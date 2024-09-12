@@ -48,7 +48,7 @@ const App = () => {
               <Route
                 path={"admin"}
                 element={
-                  <PrivateRoute role="admin" loginPath={"/login"}>
+                  <PrivateRoute role="portfolio_admin" loginPath={"/login"}>
                     <AdminPage />
                   </PrivateRoute>
                 }
@@ -56,7 +56,7 @@ const App = () => {
               <Route
                 path={"admin/portfolio/:userId"}
                 element={
-                  <PrivateRoute role="admin" loginPath={"/login"}>
+                  <PrivateRoute role="portfolio_admin" loginPath={"/login"}>
                     <AdminPortfolioPage />
                   </PrivateRoute>
                 }

@@ -1,13 +1,13 @@
 import React from "react";
 import styles from "./PortfolioLink.module.css";
 
-const displayPortfolio = (userid) => {
+const displayPortfolio = userid => {
   window.open(`/portfolio/${userid}`, "_blank");
 };
 
-const PortfolioLink = ({ data: { userid, name, role } }) => {
+const PortfolioLink = ({ data: { userid, name, privilege } }) => {
   return (
-    <span onClick={() => displayPortfolio(userid)} className={styles.item + " " + (role.includes("VIP") ? styles.vip : "")}>
+    <span onClick={() => displayPortfolio(userid)} className={styles.item + " " + ((privilege ?? "").includes("VIP") ? styles.vip : "")}>
       {name}
     </span>
   );

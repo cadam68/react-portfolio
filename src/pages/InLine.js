@@ -15,7 +15,7 @@ const InLine = () => {
     { name: "Home", link: "/home" },
     { name: "About Us", link: "/aboutUs" },
     { name: "Contact Us", link: "/contactUs" },
-    { name: "Admin", link: "/admin", accessRoles: ["admin"] },
+    { name: "Admin", link: "/admin", accessRoles: ["portfolio_admin"] },
   ];
 
   const fetchPortfolio = async controller => {
