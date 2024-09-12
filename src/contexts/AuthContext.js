@@ -30,7 +30,7 @@ const AuthContextProvider = ({ children }) => {
     const abortCtrl = new AbortController();
 
     try {
-      let data = await FetchService().login(userid, password, abortCtrl);
+      let data = await FetchService().login(userid, password, settings.appName, abortCtrl);
 
       if (!data?.token) throw new Error("Login failed, no token returned");
       const decodedToken = jwtDecode(data.token);

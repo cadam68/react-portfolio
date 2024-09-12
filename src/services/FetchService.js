@@ -180,7 +180,7 @@ const FetchService = () => {
     return data;
   };
 
-  const login = async (userid, password, abortCtrl) => {
+  const login = async (userid, password, appname, abortCtrl) => {
     const signal = abortCtrl.signal;
     const res = await fetch(`${settings.baseApiUrl}/auth/login`, {
       method: "POST",
@@ -189,7 +189,7 @@ const FetchService = () => {
         "X-API-Key": settings.apiKey,
       },
       signal: signal,
-      body: JSON.stringify({ userid, password }),
+      body: JSON.stringify({ userid, password, appname }),
     });
 
     const data = await res.json();

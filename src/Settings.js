@@ -7,7 +7,7 @@ export const settings = {
   apiKey: process.env.REACT_APP_API_KEY || "apiKey",
   baseApiUrl: process.env.REACT_APP_API_URL || "http://localhost:5001",
   basicDataReferences: ["users", "countries", "products"], // exemple of implementation
-  downloadTypes: ["card", "video", "carousel", "file", "url"],
+  downloadTypes: ["card", "video", "carousel", "file", "url", "mailto"],
   availableLanguages: { fr: "🇫🇷", en: "🇺🇸", de: "🇩🇪", es: "🇪🇸" },
   appName: "portfolio",
   refreshTokenInterval: 15, // Interval in min, set to 0 to disable the refreshToken feature

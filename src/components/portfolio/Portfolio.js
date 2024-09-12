@@ -171,7 +171,11 @@ const Portfolio = () => {
                 } else if (item.type === "file") {
                   // window.location.href = `${settings.baseApiUrl}/firebase/download?url=${encodeURIComponent(item.url)}`;
                   downloadFileHandler(item.url, item.target.split("/").pop());
-                } else if (item.type === "url") window.open(item.url, "_blank", "noopener,noreferrer");
+                } else if (item.type === "url") {
+                  window.open(item.url, "_blank", "noopener,noreferrer");
+                } else if (item.type === "mailto") {
+                  window.location.href = item.url;
+                }
               }}>
               {item.label}
             </Button>

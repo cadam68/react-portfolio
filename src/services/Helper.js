@@ -318,8 +318,8 @@ export const validateSchema = jsonObj => {
             properties: {
               id: { type: "string", pattern: "^[\\w\\[\\]-]+$" },
               lg: { type: ["string", "null"], enum: ["en", "fr", "de", null] },
-              type: { type: "string", enum: ["card", "video", "carousel", "file", "url"] },
-              target: { type: "string", pattern: "^(firebase:\\/\\/.+\\.(card|mp4|json|pdf)|https?:\\/\\/\\S+)$" },
+              type: { type: "string", enum: ["card", "video", "carousel", "file", "url", "mailto"] },
+              target: { type: "string", pattern: "^(firebase:\\/\\/.+\\.(card|mp4|json|pdf)|https?:\\/\\/\\S+|mailto:\\S+@\\S+\\.\\S+)$" },
             },
             required: ["id", "type", "target"],
             additionalProperties: false,
