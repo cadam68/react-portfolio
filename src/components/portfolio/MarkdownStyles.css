@@ -1,4 +1,4 @@
-.markdown-content .card {
+.markdown-content div.card {
     display: flex;
     align-items: center;
     overflow: hidden;
@@ -9,14 +9,22 @@
     box-shadow: 0 0 0 transparent;
 }
 
-.markdown-content .card-image {
+.markdown-content div.card.portfolio-card {
+    display: block;
+}
+
+.markdown-content div.card:not(:last-child) {
+    margin-bottom: 2rem;
+}
+
+.markdown-content div.card-image {
     flex: 1;
     max-width: 150px;
     align-self: start;
     margin-top: 2rem;
 }
 
-.markdown-content .card-image img {
+.markdown-content div.card-image img {
     width: 100%;
     height: auto;
     border: solid rgba(0, 0, 0, 0.1) 1px;
@@ -24,17 +32,48 @@
 }
 
 
-.markdown-content .card-content {
+.markdown-content div.card-content {
     flex: 2;
     padding: 16px;
     font-size: 14px;
     line-height: 1.4;
 }
 
-.markdown-content .card-content h2 {
+.markdown-content div.card-content h2 {
     margin-top: 0;
 }
 
-.markdown-content .card-content p {
+.markdown-content div.card-content p {
     margin: 8px 0 0;
+}
+
+.markdown-content div.portfolio-card ul {
+    list-style-type: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.markdown-content div.portfolio-card.col2 ul {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.markdown-content div.portfolio-card.col1 ul {
+    grid-template-columns: 1fr
+}
+
+.markdown-content div.portfolio-card ul li {
+    overflow: hidden;
+    position: relative;
+}
+
+.markdown-content div.portfolio-card ul li img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.markdown-content div.portfolio-card ul li:hover img {
+    transform: scale(1.1);
 }
