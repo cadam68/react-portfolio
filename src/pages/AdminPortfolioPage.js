@@ -7,11 +7,12 @@ import { useToast } from "../contexts/ToastContext";
 import { settings } from "../Settings";
 import styles from "./AdminPortfolioPage.module.css";
 import { copyToClipboard, validateSchema } from "../services/Helper";
+import { useAuthContext } from "../contexts/AuthContext";
 
 const logger = Log("AdminPortfolio");
 
 const AdminPortfolioPage = () => {
-  const { portfolioList } = useOutletContext();
+  const { portfolioList, updatePortfolioList } = useOutletContext();
   const { userId } = useParams();
   const [userName, setUserName] = useState();
   const [documentList, setDocumentList] = useState([]);
@@ -19,12 +20,15 @@ const AdminPortfolioPage = () => {
   const [inputValues, setInputValues] = useState({ jsonData: "" });
   const [errorProfile, setErrorProfile] = useState("");
   const [errorUpload, setErrorUpload] = useState("");
+  const [errorDelete, setErrorDelete] = useState("");
   const [hasChanged, setHasChanged] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [canBeDeleted, setCanBeDeleted] = useState(false);
   const fileInputRef = useRef(null);
   const {
     confirmService: { requestConfirm },
   } = useAppContext();
+  const { user, logout } = useAuthContext();
   const navigate = useNavigate();
   const { Toast } = useToast();
 
@@ -56,6 +60,7 @@ const AdminPortfolioPage = () => {
     if (userId) {
       const userData = portfolioList?.find(item => item.userid === userId);
       setUserName(userData?.name);
+      setCanBeDeleted(userData?.privilege ? !userData.privilege.includes("VIP") : true);
       logger.info(`fetch portfolio(portfolioId=[${userId}])...`);
       fetchPortfolio(userId);
     }
@@ -156,6 +161,45 @@ const AdminPortfolioPage = () => {
     }
   };
 
+  const handleDeletePortfolio = async () => {
+    if (
+      !(await requestConfirm(
+        <div className="inline-popup">
+          Do you want to <em>delete the Portfolio of {userName} and all related documents</em> ?
+        </div>
+      ))
+    ) {
+      return;
+    }
+    //
+    console.log(`deleting ${userName} account...`);
+    try {
+      const data = await FetchService().deletePortfolio(userId);
+      if (!data) throw new Error("Sorry, the portfolio can not be deleted...");
+      if (data?.error) throw new Error(data.error);
+      if (data.message) Toast.info(data.message);
+      updatePortfolioList({ action: "delete", data: { userid: userId } });
+
+      await requestConfirm(
+        <div className="inline-popup">
+          Portfolio of <em>{userName}</em> was successfully deleted
+        </div>,
+        [{ label: "Close", value: true }]
+      );
+      navigate(-1);
+    } catch (error) {
+      if (error.message == "SESSION_EXPIRED") {
+        Toast.error("Session Timeout!");
+        if (user) logout();
+        navigate("/login");
+      } else {
+        Toast.error(error.message);
+        setErrorDelete(error.message);
+      }
+    }
+  };
+
+  // security again direct access
   if (!userId || !userName) return null;
 
   return (
@@ -165,7 +209,7 @@ const AdminPortfolioPage = () => {
         <div className={styles.adminPortfolio}>
           <div>{userName} Portfolio Profile</div>
           <div>
-            {<p className={styles.error}>{errorProfile}&nbsp;</p>}
+            <p className={styles.error}>{errorProfile}&nbsp;</p>
             <form className="inline-form" onSubmit={handleSubmit}>
               <textarea style={{ width: "100%", height: "400px" }} name="jsonData" value={inputValues.jsonData} onBlur={() => setErrorProfile("")} onChange={e => handleInputChange(e, /.*/)} />
               <button type="submit" disabled={!!errorProfile || !inputValues.jsonData || !hasChanged}>
@@ -211,6 +255,19 @@ const AdminPortfolioPage = () => {
           </div>
         </div>
       </div>
+      {canBeDeleted && (
+        <>
+          <hr />
+          <div className={styles.adminPortfolio + " inline-content inline-form"}>
+            <div className={"warning"}>
+              <div className={styles.error}>{errorDelete}&nbsp;</div>
+              <button onClick={handleDeletePortfolio} type="button">
+                {`Delete ${userName} Portfolio`.toUpperCase()}
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

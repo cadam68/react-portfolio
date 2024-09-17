@@ -1,0 +1,70 @@
+
+.portfolioCreationContainer {
+}
+
+.formGroup input[type= "text"],
+.formGroup input[type="email"],
+.formGroup textarea,
+.formGroup input[type="file"] {
+    display: inline-block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 10px;
+}
+
+.formGroup textarea {
+    height: 200px;
+}
+
+.portfolioForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.portfolioForm .errorText {
+    color: red;
+    font-size: 1.2rem;
+    margin: 0;
+    padding: 0;
+}
+
+.formGroup input.inputError,
+.formGroup textarea.inputError {
+    border: 1px solid  var(--color-dark);
+}
+
+.formGroup button {
+    margin: 0;
+}
+
+.formGroup .inputError button {
+    color:var(--color-dark)
+}
+
+.formGroup {
+    margin-bottom: 15px;
+}
+
+.formGroup label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+
+.formGroup .imagePreview {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f1f1f1;
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
+.formGroup .removeBtn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}

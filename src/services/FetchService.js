@@ -164,7 +164,7 @@ const FetchService = () => {
     if (!token) return false;
 
     const signal = abortCtrl.signal;
-    const res = await fetch(`${settings.baseApiUrl}/portfolio`, {
+    const res = await fetch(`${settings.baseApiUrl}/portfolio/profile`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -239,7 +239,85 @@ const FetchService = () => {
     }
   };
 
-  return { getDownloadFile, getDownloadUrl, getDownloadJson, getMarkdownFile, getPortfolioList, getPortfolio, getPortfolioDocumentList, savePortfolio, uploadPortfolioDocument, login, isAuthorized, refreshToken };
+  const fetchFormData = async (formData, route, sendToken = false, abortCtrl = new AbortController()) => {
+    const token = localStorage.getItem("token");
+    if (sendToken && !token) throw new Error("Invalid parameters");
+    if (!formData) throw new Error("Invalid parameters");
+
+    const signal = abortCtrl.signal;
+    try {
+      const headers = { "X-API-Key": settings.apiKey };
+      if (sendToken) headers["Authorization"] = token;
+
+      const response = await fetch(`${settings.baseApiUrl}/${route}`, {
+        headers: headers,
+        method: "POST",
+        body: formData,
+        signal: signal,
+      });
+
+      if (response.status == 403) throw new Error("SESSION_EXPIRED");
+      const data = await response.json();
+      if (typeof data === "string" && !response.ok) {
+        throw new Error(data);
+      }
+      return data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  const fetchDelete = async (route, id, sendToken = false, abortCtrl = new AbortController()) => {
+    const token = localStorage.getItem("token");
+    if (sendToken && !token) throw new Error("Invalid parameters");
+    if (!route || !id) throw new Error("Invalid parameters");
+
+    const signal = abortCtrl.signal;
+    try {
+      const headers = { "X-API-Key": settings.apiKey };
+      if (sendToken) headers["Authorization"] = token;
+
+      const response = await fetch(`${settings.baseApiUrl}/${route}/${id}`, {
+        headers: headers,
+        method: "DELETE",
+        signal: signal,
+      });
+
+      if (response.status == 403) throw new Error("SESSION_EXPIRED");
+      const data = await response.json();
+      if (typeof data === "string" && !response.ok) {
+        throw new Error(data);
+      }
+      return data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  const createPortfolioBundle = async (formData, abortCtrl) => {
+    return await fetchFormData(formData, "portfolio/bundle", true);
+  };
+
+  const deletePortfolio = async (userid, abortCtrl) => {
+    return await fetchDelete("portfolio", userid, true);
+  };
+
+  return {
+    getDownloadFile,
+    getDownloadUrl,
+    getDownloadJson,
+    getMarkdownFile,
+    getPortfolioList,
+    getPortfolio,
+    getPortfolioDocumentList,
+    savePortfolio,
+    uploadPortfolioDocument,
+    login,
+    isAuthorized,
+    refreshToken,
+    createPortfolioBundle,
+    deletePortfolio,
+  };
 };
 
 export { FetchService };

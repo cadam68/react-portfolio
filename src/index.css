@@ -282,7 +282,7 @@ p:not(:last-child) {
   margin-bottom: 8px;
 }
 
-section:not(:last-child) {
+section:not(:last-of-type) {
   margin-bottom: 2rem;
 }
 

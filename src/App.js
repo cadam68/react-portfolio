@@ -15,6 +15,7 @@ import Login from "./pages/Login";
 import AdminPortfolioPage from "./pages/AdminPortfolioPage";
 import { setLogLevel, setLogOn } from "./services/LogService";
 import { useEffect } from "react";
+import PortfolioCreation from "./pages/PortfolioCreation";
 
 const App = () => {
   const { debug } = useDebugContext();
@@ -61,6 +62,7 @@ const App = () => {
                   </PrivateRoute>
                 }
               />
+              <Route path={"admin/createPortfolio"} element={<PortfolioCreation />} />
             </Route>
             <Route path="/portfolio/:userId/:lg?/:itemId?" element={<Portfolio key={window.location.pathname} />} />
             <Route path="*" element={<Navigate to="/" />} />

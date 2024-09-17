@@ -149,10 +149,6 @@ const Portfolio = () => {
     }
   };
 
-  const qwe = qwe => {
-    console.log(qwe);
-  };
-
   if (!state.items) return;
   if (!settings?.visited?.includes(userId)) setSettings({ ...settings, visited: [...settings.visited, userId] });
 

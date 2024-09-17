@@ -54,6 +54,28 @@ const InLine = () => {
     });
   }, []);
 
+  const updatePortfolioList = value => {
+    let { action, data } = value;
+    switch (action) {
+      case "add":
+        {
+          let { userid, name } = data;
+          if (userid && name) {
+            // console.log(`update portfolioList, add new userid=[${userid}], name=[${name}]`);
+            setPortfolioList(previousState => [...previousState, { userid, name, privilege: null }]);
+          }
+        }
+        break;
+      case "delete": {
+        let { userid } = data;
+        if (userid) {
+          // console.log(`update portfolioList, delete userid=[${userid}]`);
+          setPortfolioList(previousState => previousState.filter(item => item.userid !== userid));
+        }
+      }
+    }
+  };
+
   return (
     <>
       <Header links={links} />
@@ -63,7 +85,7 @@ const InLine = () => {
           <meta name="description" content="In-Line is a dynamic and innovative company dedicated to providing high-quality and cutting-edge technology products to our valued customers across the globe." />
           <meta name="keywords" content="Innovative technology, Customer-focused, High-quality products, Global tech solutions" />
         </Helmet>
-        <Outlet context={{ portfolioList }} />
+        <Outlet context={{ portfolioList, updatePortfolioList }} />
       </section>
       <Footer links={links} />
     </>

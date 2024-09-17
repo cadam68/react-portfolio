@@ -43,7 +43,7 @@ const AdminPage = () => {
     { name: "Email", key: "email", sortable: false, width: "200px" },
     { name: "Nb visited", key: "nbvisited", sortable: true, width: "30px" },
     { name: "Date visited", key: "lastvisiteddate", sortable: false, width: "250px" },
-    { name: "Role", key: "role", sortable: false, width: "200px" },
+    { name: "Feature", key: "privilege", sortable: false, width: "200px" },
   ];
 
   const handleRowClick = async id => {
@@ -57,7 +57,7 @@ const AdminPage = () => {
   };
 
   const handleCreateNewPortfolio = async e => {
-    await requestConfirm(<span>Coming soon...</span>, [{ label: ":)", value: true }]);
+    navigate("createPortfolio", { state: { portfolioName: inputValues.portfolioName } });
   };
 
   if (!data) return <SpinnerFullPage />;
