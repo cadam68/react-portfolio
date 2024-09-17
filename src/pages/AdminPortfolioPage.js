@@ -172,7 +172,6 @@ const AdminPortfolioPage = () => {
       return;
     }
     //
-    console.log(`deleting ${userName} account...`);
     try {
       const data = await FetchService().deletePortfolio(userId);
       if (!data) throw new Error("Sorry, the portfolio can not be deleted...");
