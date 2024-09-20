@@ -7,9 +7,10 @@ import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { removeDiacritics } from "../services/Helper";
 import { FetchService } from "../services/FetchService";
 import { useAuthContext } from "../contexts/AuthContext";
+// import { useWebSocket } from "./../contexts/WebSocketContext";
 
 const PortfolioCreation = () => {
-  const { portfolioList, updatePortfolioList } = useOutletContext();
+  const { portfolioList } = useOutletContext();
   const location = useLocation();
   const [formData, setFormData] = useState({
     username: "",
@@ -26,6 +27,7 @@ const PortfolioCreation = () => {
   const { Toast } = useToast();
   const { user, logout } = useAuthContext();
   const navigate = useNavigate();
+  // const { sendMessage } = useWebSocket();
 
   useEffect(() => {
     if (location.state) setFormData({ ...formData, username: location.state.portfolioName || "" });
@@ -80,6 +82,16 @@ const PortfolioCreation = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
+
+  const ComponentPortfolioCreated = (userid, username) => (
+    <span>
+      Portfolio of{" "}
+      <a href={`/portfolio/${userid}`} target="_blank">
+        {username}
+      </a>{" "}
+      successfully created!
+    </span>
+  );
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -139,18 +151,7 @@ const PortfolioCreation = () => {
         return;
       }
 
-      updatePortfolioList({ action: "add", data: { userid: data.userid, name: data.name } });
-      await requestConfirm(
-        <span>
-          Portfolio of{" "}
-          <a href={`/portfolio/${data.userid}`} target="_blank">
-            {formData.username}
-          </a>{" "}
-          succeed!
-        </span>,
-        [{ label: "Close", value: true }]
-      );
-
+      await requestConfirm(ComponentPortfolioCreated(data.userid, formData.username), [{ label: "Close", value: true }]);
       setSubmit(false);
       setErrors({ ...errors, submit: "" });
       Toast.info(`Portfolio of ${formData.username} created with id ${data.userid}`);

@@ -11,6 +11,8 @@ import { AppContextProvider } from "./contexts/AppContext";
 import { ToastProvider } from "./contexts/ToastContext";
 import "./i18n";
 import { AuthContextProvider } from "./contexts/AuthContext";
+import { WebSocketProvider } from "./contexts/WebSocketContext";
+import { settings } from "./Settings";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -19,11 +21,13 @@ root.render(
     <SettingsContextProvider>
       <AppContextProvider>
         <ToastProvider>
-          <DndProvider backend={HTML5Backend}>
-            <AuthContextProvider>
-              <App />
-            </AuthContextProvider>
-          </DndProvider>
+          <WebSocketProvider appName={settings.appName}>
+            <DndProvider backend={HTML5Backend}>
+              <AuthContextProvider>
+                <App />
+              </AuthContextProvider>
+            </DndProvider>
+          </WebSocketProvider>
         </ToastProvider>
       </AppContextProvider>
     </SettingsContextProvider>

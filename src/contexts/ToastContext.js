@@ -6,7 +6,7 @@ const logger = Log("ToastContext");
 const ToastContext = createContext({
   toasts: [],
   removeToast: () => {},
-  Toast: { info: () => {}, warn: () => {}, error: () => {} },
+  Toast: { info: () => {}, warn: () => {}, error: () => {}, broadcast: () => {} },
 });
 
 export function useToast() {
@@ -21,6 +21,7 @@ export const ToastProvider = ({ children }) => {
     INFO: { label: "info", duration: 3 },
     WARNING: { label: "warning", duration: 6 },
     ERROR: { label: "error", duration: 6 },
+    BROADCAST: { label: "broadcast", duration: 3 },
   });
 
   const createToast = (text, type, id = crypto.randomUUID()) => {
@@ -30,7 +31,7 @@ export const ToastProvider = ({ children }) => {
   const addToast = (text, type = ToastType.INFO) => {
     if (!text) return;
     const toast = createToast(text, type);
-    setToasts((prev) => [...prev, toast]);
+    setToasts(prev => [...prev, toast]);
     setTimeout(() => {
       logger.debug(`remove toast: ${JSON.stringify(toast)}`);
       removeToast(toast.id);
@@ -38,14 +39,15 @@ export const ToastProvider = ({ children }) => {
     return toast.id;
   };
 
-  const removeToast = (id) => {
-    setToasts((prev) => prev.filter((toast) => toast.id !== id));
+  const removeToast = id => {
+    setToasts(prev => prev.filter(toast => toast.id !== id));
   };
 
   const Toast = {
-    info: (text) => addToast(text, ToastType.INFO),
-    warn: (text) => addToast(text, ToastType.WARNING),
-    error: (text) => addToast(text, ToastType.ERROR),
+    info: text => addToast(text, ToastType.INFO),
+    warn: text => addToast(text, ToastType.WARNING),
+    error: text => addToast(text, ToastType.ERROR),
+    broadcast: text => addToast(text, ToastType.BROADCAST),
   };
 
   const contextValues = useMemo(() => ({ toasts, Toast, removeToast, addToast }), [toasts]); // value is cached by useMemo

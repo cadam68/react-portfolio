@@ -19,6 +19,10 @@ const AppContext = createContext({
     portfolioId: undefined,
     setPortfolioId: () => {},
   },
+  webSocketService: {
+    portfolioEvent: undefined,
+    setPortfolioEvent: () => {},
+  },
 });
 
 const currentDate = new Date();
@@ -68,6 +72,7 @@ const AppContextProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isReady, setIsReady] = useState(false);
   const [portfolioId, setPortfolioId] = useState();
+  const [portfolioEvent, setPortfolioEvent] = useState();
 
   // load basicData(s)
   useEffect(() => {
@@ -109,7 +114,7 @@ const AppContextProvider = ({ children }) => {
         portfolioData.downloadUrls = downloadUrls;
         setPortfolio(portfolioData);
       } catch (e) {
-        // console.log(e);
+        if (e.message) logger.error(e.message);
         setPortfolio({}); // if(empty) will be redirected to HomePage
       }
       setIsLoading(false);
@@ -131,8 +136,9 @@ const AppContextProvider = ({ children }) => {
       isLoading,
       isReady,
       portfolioService: { portfolio, portfolioId, setPortfolioId },
+      webSocketService: { portfolioEvent, setPortfolioEvent },
     }),
-    [ConfirmModalComponent, basicData, isLoading, isReady, portfolioId, portfolio]
+    [ConfirmModalComponent, basicData, isLoading, isReady, portfolioId, portfolio, portfolioEvent]
   ); // value is cached by useMemo
 
   return <AppContext.Provider value={contextValues}>{children}</AppContext.Provider>;

@@ -7,9 +7,16 @@ import { Outlet } from "react-router-dom";
 import { changeTheme, sortAndLimitPortfolioItems, themes } from "../services/Helper";
 import { FetchService } from "../services/FetchService";
 import "../inline.css";
+import { useAppContext } from "../contexts/AppContext";
+import { Log } from "../services/LogService";
+
+const logger = Log("InLine");
 
 const InLine = () => {
   const [portfolioList, setPortfolioList] = useState();
+  const {
+    webSocketService: { portfolioEvent },
+  } = useAppContext();
 
   const links = [
     { name: "Home", link: "/home" },
@@ -24,8 +31,8 @@ const InLine = () => {
       const data = await FetchService().getPortfolioList(false, signal);
       setPortfolioList(sortAndLimitPortfolioItems(data));
     } catch (err) {
-      if (err.name === "AbortError") console.log("fetch portfolio aborted!");
-      else console.log(err.message);
+      if (err.name === "AbortError") logger.debug("fetch portfolio aborted!");
+      else logger.error(err.message);
     }
   };
 
@@ -61,20 +68,26 @@ const InLine = () => {
         {
           let { userid, name } = data;
           if (userid && name) {
-            // console.log(`update portfolioList, add new userid=[${userid}], name=[${name}]`);
+            logger.debug(`update portfolioList, add new userid=[${userid}], name=[${name}]`);
             setPortfolioList(previousState => [...previousState, { userid, name, privilege: null }]);
           }
         }
         break;
-      case "delete": {
+      case "del": {
         let { userid } = data;
         if (userid) {
-          // console.log(`update portfolioList, delete userid=[${userid}]`);
+          logger.debug(`update portfolioList, delete userid=[${userid}]`);
           setPortfolioList(previousState => previousState.filter(item => item.userid !== userid));
         }
       }
     }
   };
+
+  useEffect(() => {
+    if (!portfolioEvent?.action || !portfolioEvent?.data) return;
+    logger.debug(`Execute ${portfolioEvent.action} with ${JSON.stringify(portfolioEvent.data)} ...`);
+    updatePortfolioList(portfolioEvent);
+  }, [portfolioEvent]);
 
   return (
     <>
@@ -85,7 +98,7 @@ const InLine = () => {
           <meta name="description" content="In-Line is a dynamic and innovative company dedicated to providing high-quality and cutting-edge technology products to our valued customers across the globe." />
           <meta name="keywords" content="Innovative technology, Customer-focused, High-quality products, Global tech solutions" />
         </Helmet>
-        <Outlet context={{ portfolioList, updatePortfolioList }} />
+        <Outlet context={{ portfolioList }} />
       </section>
       <Footer links={links} />
     </>

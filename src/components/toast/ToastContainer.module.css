@@ -21,6 +21,7 @@
 .toast-error { background: rgba(253, 221, 211, 0.7);  }
 .toast-info { background: rgba(221, 221, 253, 0.7);  }
 .toast-warning { background: rgba(253,217,129, 0.7); }
+.toast-broadcast { background: rgba(255, 254, 137, 0.56); }
 
 @keyframes fadein {
     from { opacity: 0; }

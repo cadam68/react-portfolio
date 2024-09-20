@@ -12,7 +12,7 @@ import { useAuthContext } from "../contexts/AuthContext";
 const logger = Log("AdminPortfolio");
 
 const AdminPortfolioPage = () => {
-  const { portfolioList, updatePortfolioList } = useOutletContext();
+  const { portfolioList } = useOutletContext();
   const { userId } = useParams();
   const [userName, setUserName] = useState();
   const [documentList, setDocumentList] = useState([]);
@@ -44,7 +44,7 @@ const AdminPortfolioPage = () => {
         const portfolioData = await FetchService().getDownloadJson(urlProfile, abortCtrl);
         setInputValues({ jsonData: JSON.stringify(portfolioData, null, 2) });
       } catch (e) {
-        console.error(e);
+        if (e.message) logger.error(e.message);
         await requestConfirm(
           <div className="inline-popup">
             <div>
@@ -177,7 +177,6 @@ const AdminPortfolioPage = () => {
       if (!data) throw new Error("Sorry, the portfolio can not be deleted...");
       if (data?.error) throw new Error(data.error);
       if (data.message) Toast.info(data.message);
-      updatePortfolioList({ action: "delete", data: { userid: userId } });
 
       await requestConfirm(
         <div className="inline-popup">

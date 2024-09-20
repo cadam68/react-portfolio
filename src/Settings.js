@@ -13,4 +13,5 @@ export const settings = {
   refreshTokenInterval: 15, // Interval in min, set to 0 to disable the refreshToken feature
   documentMaxSize: 5 * 1024 * 1024, // Maximum uploaded file size in bytes (5 MB in this case)
   documentAllowedExtensions: ["pdf", "jpg", "png", "mp4", "card", "carousel.json"], // Allowed file extensions
+  broadcastIgnoredPathnames: ["/portfolio/"],
 };
