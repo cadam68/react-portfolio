@@ -64,5 +64,5 @@ export const WebSocketProvider = ({ children, appName }) => {
     }
   };
 
-  return <WebSocketContext.Provider value={{ socket: socket.current, sendMessage }}>{children}</WebSocketContext.Provider>;
+  return <WebSocketContext.Provider value={{ sendMessage }}>{children}</WebSocketContext.Provider>;
 };

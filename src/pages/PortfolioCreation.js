@@ -7,7 +7,10 @@ import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { removeDiacritics } from "../services/Helper";
 import { FetchService } from "../services/FetchService";
 import { useAuthContext } from "../contexts/AuthContext";
+import { Log } from "../services/LogService";
 // import { useWebSocket } from "./../contexts/WebSocketContext";
+
+const logger = Log("PortfolioCreation");
 
 const PortfolioCreation = () => {
   const { portfolioList } = useOutletContext();
@@ -98,64 +101,82 @@ const PortfolioCreation = () => {
     let valid = true;
     const newErrors = {};
 
-    if (!formData.username) {
-      valid = false;
-      newErrors.username = "Username is required";
-    }
-    if (!formData.email || !validateEmail(formData.email)) {
-      valid = false;
-      newErrors.email = "Please enter a valid email";
-    }
-    if (!formData.welcomeText) {
-      valid = false;
-      newErrors.welcomeText = "Welcome Text is required";
-    }
-    if (!formData.userImage) {
-      valid = false;
-      newErrors.userImage = "Please select a user image";
-    }
-    setErrors(newErrors);
+    try {
+      // This bug is on purpose
+      setFormData({ ...formData, username: formData.username.trim(), welcomeText: formData.welcomeText.trim() });
 
-    if (valid) {
-      setSubmit(true);
-      if (!(await requestConfirm(<span>Please Confirm the creation of the portfolio</span>))) return;
-
-      let userid = removeDiacritics(formData.username)
-        .toLowerCase()
-        .replace(/[^a-zA-Z0-9]/g, "");
-
-      const formDataToSubmit = new FormData();
-      formDataToSubmit.append("userid", userid);
-      formDataToSubmit.append("username", formData.username);
-      formDataToSubmit.append("email", formData.email);
-      formDataToSubmit.append("welcomeText", formData.welcomeText);
-      formDataToSubmit.append("userImage", formData.userImage);
-      formData.additionalImages.forEach((image, index) => formDataToSubmit.append(`additionalImage_${index + 1}`, image));
-
-      let data;
-      try {
-        data = await FetchService().createPortfolioBundle(formDataToSubmit);
-        if (!data) throw new Error("Sorry, the portfolio can not be created...");
-        if (data?.errors?.length) throw new Error(data.errors[0].errorMsg);
-        if (data.message) Toast.info(data.message);
-      } catch (error) {
-        if (error.message == "SESSION_EXPIRED") {
-          Toast.error("Session Timeout!");
-          if (user) logout();
-          navigate("/login");
-        } else {
-          Toast.error(error.message);
-          setErrors({ submit: error.message });
-        }
-        setSubmit(false);
-        return;
+      logger.debug("validation of the user input");
+      if (!formData.username) {
+        valid = false;
+        newErrors.username = "Username is required";
       }
+      if (!formData.email || !validateEmail(formData.email)) {
+        valid = false;
+        newErrors.email = "Please enter a valid email";
+      }
+      if (!formData.welcomeText) {
+        valid = false;
+        newErrors.welcomeText = "Welcome Text is required";
+      }
+      if (!formData.userImage) {
+        valid = false;
+        newErrors.userImage = "Please select a user image";
+      }
+      setErrors(newErrors);
+      logger.debug(`user inputs are ${valid ? "" : "not"} valid`);
 
-      await requestConfirm(ComponentPortfolioCreated(data.userid, formData.username), [{ label: "Close", value: true }]);
-      setSubmit(false);
-      setErrors({ ...errors, submit: "" });
-      Toast.info(`Portfolio of ${formData.username} created with id ${data.userid}`);
-      clearForm();
+      if (valid) {
+        if (!(await requestConfirm(<span>Please Confirm the creation of the portfolio</span>))) return;
+
+        logger.debug(`generate userid based on username=[${formData.username}]`);
+        let userid = removeDiacritics(formData.username)
+          .toLowerCase()
+          .replace(/[^a-zA-Z0-9]/g, "");
+
+        // Format the name, this bug is on purpose, exception throw if empty
+        let username = formData.username.trim();
+        username = username
+          .split(" ")
+          .map(item => item[0].toUpperCase() + item.slice(1).toLowerCase())
+          .join(" ");
+
+        logger.debug("submit the formData");
+        const formDataToSubmit = new FormData();
+        formDataToSubmit.append("userid", userid);
+        formDataToSubmit.append("username", username);
+        formDataToSubmit.append("email", formData.email);
+        formDataToSubmit.append("welcomeText", formData.welcomeText);
+        formDataToSubmit.append("userImage", formData.userImage);
+        formData.additionalImages.forEach((image, index) => formDataToSubmit.append(`additionalImage_${index + 1}`, image));
+
+        let data;
+        try {
+          setSubmit(true);
+          data = await FetchService().createPortfolioBundle(formDataToSubmit);
+          if (!data) throw new Error("Sorry, the portfolio can not be created...");
+          if (data?.errors?.length) throw new Error(data.errors[0].errorMsg);
+          if (data.message) Toast.info(data.message);
+        } catch (error) {
+          if (error.message == "SESSION_EXPIRED") {
+            Toast.error("Session Timeout!");
+            if (user) logout();
+            navigate("/login");
+          } else {
+            Toast.error(error.message);
+            setErrors({ submit: error.message });
+          }
+          setSubmit(false);
+          return;
+        }
+        logger.debug("The formData has successfully submitted");
+        await requestConfirm(ComponentPortfolioCreated(data.userid, formData.username), [{ label: "Close", value: true }]);
+        setSubmit(false);
+        setErrors({ ...errors, submit: "" });
+        Toast.info(`Portfolio of ${formData.username} created with id ${data.userid}`);
+        clearForm();
+      }
+    } catch (err) {
+      logger.fatal(err.message);
     }
   };
 
