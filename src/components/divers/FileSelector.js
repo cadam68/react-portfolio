@@ -27,25 +27,27 @@ const FileSelector = forwardRef(({ documentAllowedExtensions, documentMaxSize, o
     const file = event.target.files[0];
     if (file) {
       const isValidFileType = documentAllowedExtensions.some(fileExtension => file.name.endsWith(fileExtension));
-      if (file.size > documentMaxSize * 1024) {
-        setErrorUpload(`${file.name} file size exceeds the maximum limit of ${documentMaxSize} KB`);
-        setSelectedFile(null);
-        if (onFileSelect) {
-          onFileSelect(null); // Notify parent about invalid file
-        }
-      } else if (!isValidFileType) {
+      if (!isValidFileType) {
         setErrorUpload(`${file.name} file type in invalid. Only ${documentAllowedExtensions.join(", ")} documents are allowed`);
         setSelectedFile(null);
         if (onFileSelect) {
           onFileSelect(null); // Notify parent about invalid file
         }
       } else {
-        setSelectedFile(file);
-        setErrorUpload("");
-        if (onFileSelect) {
-          onFileSelect(file); // Notify parent about valid file selection
+        if (file.size > documentMaxSize * 1024) {
+          setErrorUpload(`${file.name} file size exceeds the maximum limit of ${documentMaxSize} KB`);
+          setSelectedFile(null);
+          if (onFileSelect) {
+            onFileSelect(null); // Notify parent about invalid file
+          }
+        } else {
+          setSelectedFile(file);
+          setErrorUpload("");
+          if (onFileSelect) {
+            onFileSelect(file); // Notify parent about valid file selection
+          }
+          event.target.value = null;
         }
-        event.target.value = null;
       }
     }
   };

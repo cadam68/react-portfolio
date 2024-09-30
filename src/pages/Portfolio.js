@@ -1,22 +1,22 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAppContext } from "../../contexts/AppContext";
-import { Log } from "../../services/LogService";
-import { useToast } from "../../contexts/ToastContext";
+import { useAppContext } from "../contexts/AppContext";
+import { Log } from "../services/LogService";
+import { useToast } from "../contexts/ToastContext";
 import styles from "./Portfolio.module.css";
 import ReactPlayer from "react-player";
 import { FaPlay, FaPause, FaVolumeMute, FaVolumeUp } from "react-icons/fa";
 import { Helmet } from "react-helmet";
-import useComponentTranslation from "../../hooks/useComponentTranslation";
+import useComponentTranslation from "../hooks/useComponentTranslation";
 import S from "string";
-import Button from "../divers/Button";
-import { FetchService } from "../../services/FetchService";
-import MarkdownDisplay from "./MarkdownDisplay";
-import UseLocalStorageState from "../../hooks/UseLocalStorageState";
-import Carousel from "./Carousel";
-import { changeTheme, themes } from "../../services/Helper";
-import PortfolioHeader from "./PortfolioHeader";
-import SpinnerFullPage from "../divers/SpinnerFullPage";
+import Button from "../components/divers/Button";
+import { FetchService } from "../services/FetchService";
+import MarkdownDisplay from "../components/portfolio/MarkdownDisplay";
+import UseLocalStorageState from "../hooks/UseLocalStorageState";
+import Carousel from "../components/portfolio/Carousel";
+import { changeTheme, themes } from "../services/Helper";
+import PortfolioHeader from "../components/portfolio/PortfolioHeader";
+import SpinnerFullPage from "../components/divers/SpinnerFullPage";
 
 const logger = Log("Portfolio");
 

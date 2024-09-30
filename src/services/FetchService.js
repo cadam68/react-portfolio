@@ -221,7 +221,6 @@ const FetchService = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) return false;
-
       const res = await fetch(`${settings.baseApiUrl}/auth/refreshToken`, {
         method: "GET",
         headers: {

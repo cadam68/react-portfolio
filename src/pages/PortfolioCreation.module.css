@@ -4,12 +4,28 @@
 
 .formGroup input[type= "text"],
 .formGroup input[type="email"],
+.formGroup input[type="url"],
 .formGroup textarea,
+.formGroup select,
 .formGroup input[type="file"] {
     display: inline-block;
     width: 100%;
     text-align: left;
     padding: 10px 10px;
+}
+
+.formGroup select.h3 {
+    font-size: 2rem;
+    color: var(--color-header);
+    font-weight: 800;
+    /*
+    border: 1px solid var(--color-light);
+    border-right: 0;
+    border-left: 0;
+    border-radius: 0;
+    */
+    padding: 0 0 10px 0;
+    border:0;
 }
 
 .formGroup textarea {

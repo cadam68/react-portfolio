@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import Portfolio from "./components/portfolio/Portfolio";
+import Portfolio from "./pages/Portfolio";
 import SpinnerFullPage from "./components/divers/SpinnerFullPage";
 import { useAppContext } from "./contexts/AppContext";
 import ToastContainer from "./components/toast/ToastContainer";

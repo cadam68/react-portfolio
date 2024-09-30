@@ -77,3 +77,18 @@
 .markdown-content div.portfolio-card ul li:hover img {
     transform: scale(1.1);
 }
+
+.markdown-content div.two-columns {
+    display: block;
+    column-count: 2;
+    column-gap: 30px;
+    column-rule: 1px solid #ccc;
+}
+
+.markdown-content div.two-columns p {
+    break-inside: avoid;
+}
+
+.markdown-content div.block {
+    display: block;
+}
