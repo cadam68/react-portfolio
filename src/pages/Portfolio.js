@@ -198,9 +198,8 @@ const Portfolio = () => {
               volume={volume}
               onProgress={videoHandler.bind(this, "handleProgress")}
               width="100%"
-              height="calc(100% + 4px)"
+              height="100%"
               controls={false} // Hide default controls
-              style={{ marginTop: "-2px", minHeight: "370px" }}
             />
             <div className={`${styles.controls} ${!controlsVisible && styles.hidden}`}>
               <button onClick={videoHandler.bind(this, "PlayPause")}>{playing ? <FaPause /> : <FaPlay />}</button>
@@ -211,7 +210,7 @@ const Portfolio = () => {
           </div>
         )}
         {cardUrl && <MarkdownDisplay filePath={cardUrl} />}
-        {carousel && <Carousel images={carousel} showButtons={false} speed={3} />}
+        {carousel && <Carousel images={carousel} showButtons={false} speed={6} />}
       </section>
     </>
   );

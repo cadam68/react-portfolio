@@ -9,7 +9,7 @@
     max-width: none;
     min-height: 50vh;
     background-color: white;
-    width: calc(100vw - 10px);
+    /* width: calc(100vw - 10px); */
 }
 
 .largeContainer em {
