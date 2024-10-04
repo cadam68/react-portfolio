@@ -1,51 +1,212 @@
-.container, .largeContainer {
+:root  {
+    --color-portfolio_theme: #2F80ED;
+    --color-portfolio_theme_strong: #185ABD;
+    --color-portfolio_background: #fdfdfd;
+    --color-portfolio_header_background: #ffffff;
+    --color-portfolio_text: #666;
+    --color-portfolio_text_strong: #333;
+}
 
-    margin: 0 auto;
-    grid-template-rows: auto 1fr;
-    display: grid;
-    gap: 20px;
+/* General styles for the entire layout */
+.portfolio {
+    font-family: 'Arial', sans-serif;
+    font-size: 1.4rem;
+    margin: 0;
     padding: 0;
-    font-size:1.4rem;
-    max-width: 80%;
-    /*
-    max-width: calc(100vw - 120px);
-    width: fit-content;
-    width: 100%;
-    max-width: 700px;
-    justify-content: center;
-    */
+    background-color: var(--color-portfolio_background);
 }
 
-.largeContainer {
-    max-width: none;
-    min-height: 50vh;
-    background-color: white;
-    width: calc(100vw - 10px);
-}
-
-.largeContainer em {
-    color:var(--color-dark);
-    font-weight: normal;
-}
-
-.navigation {
-    background-color: var(--color-background);
-    padding-bottom: 2rem;
+/* The wrapper takes up the remaining space */
+.portfolio .wrapper {
     display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100vw;
+}
+
+/* The content will grow to fill the space before the footer */
+.portfolio .container {
+    flex: 1;
+    padding: 20px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    width: inherit;
+}
+
+/* Header navigation */
+.portfolio header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: var(--color-portfolio_header_background);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.portfolio header .logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--color-portfolio_theme);
+}
+
+.portfolio div.logo span {
+    display: inline-flex;
     justify-content: center;
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.06);
+    align-items: center;
+    color:white;
+    background-color: var(--color-portfolio_theme);
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
 }
 
-.container h2 {
-    color: var(--color-dark);
-    font-size: 2.2rem;
+.portfolio header nav ul {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 20px;
+}
+
+
+.portfolio header nav ul li a {
+    color: var(--color-portfolio_text_strong);
+    text-decoration: none;
+    font-size: 1.6rem;
     font-weight: 500;
-    /* text-shadow: 1px 1px 0 rgb(255, 255, 255, 1); */
+    cursor: pointer;
+}
+
+.portfolio header nav ul li a:hover {
+    border-bottom: 2px solid var(--color-portfolio_theme);
+}
+
+.portfolio header nav ul li a:global(.disabled) {
+    color: var(--color-portfolio_theme_strong);
+    border-bottom: 2px solid var(--color-portfolio_theme_strong);
+    cursor: default;
+    pointer-events: none;
 }
 
 
+/* main section */
+.portfolio .mainContent {
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: flex-start;
+    margin-top: 40px;
+    column-gap: 4rem;
+    width: 100%;
+}
 
-.videoWrapper {
+/* Left content for text and buttons */
+.portfolio .mainContent .left-content {
+    /* max-width: 50%; */
+}
+
+.portfolio .mainContent h1 {
+    font-size: 36px;
+    color: var(--color-portfolio_text_strong);
+    margin-bottom: 30px;
+}
+
+.portfolio .mainContent .left-content p {
+    color: var(--color-portfolio_text);
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.portfolio .mainContent .left-content .buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.portfolio .mainContent .left-content .buttons a {
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 2px;
+    transition: background-color 0.3s ease;
+
+    color: var(--color-portfolio_theme);
+    background-color: white;
+    box-shadow:none;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.portfolio .mainContent .left-content .buttons a:hover {
+    color: var(--color-portfolio_theme_strong);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.portfolio .mainContent .left-content .buttons a.strong {
+    color: white;
+    background-color: var(--color-portfolio_theme);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+    border:none;
+}
+
+.portfolio .mainContent .left-content .buttons a.strong:hover {
+    background-color: var(--color-portfolio_theme_strong);
+}
+
+/* Right content for image */
+.portfolio .mainContent .right-content {
+    position: relative;
+}
+
+.portfolio .mainContent .right-content img {
+    width: 350px;
+    border-radius: 2px;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.3); /* Shadow effect */
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Tag styling for elements overlapping the image */
+.portfolio .mainContent .right-content .tag {
+    position: absolute;
+    background-color: var(--color-portfolio_theme_strong);
+    color: white;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 2px;
+}
+
+.portfolio .mainContent .right-content .tag-1 {
+    top: 10px;
+    left: -40px;
+}
+
+.portfolio .mainContent .right-content .tag-2 {
+    bottom: 20px;
+    right: -40px;
+}
+
+.portfolio .footer {
+    text-align: center;
+    border-top: 1px solid #ddd;
+    margin-top: 40px;
+    height: auto;
+    padding: 10px;
+}
+
+.portfolio .footer p {
+    color: var(--color-portfolio_text_strong);;
+}
+
+.portfolio .center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+/* Video Control */
+.portfolio .videoWrapper {
     /* height: 60vh; */
     border-radius: 3px;
     overflow: hidden;
@@ -59,7 +220,7 @@
     margin: auto;
 }
 
-.controls {
+.portfolio .controls {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -67,19 +228,19 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.3);
     padding: 10px;
     opacity: 1;
     pointer-events: all;
     transition: opacity 2s ease;
 }
 
-.controls.hidden {
+.portfolio .controls.hidden {
     opacity: 0;
     pointer-events: none;
 }
 
-.controls button {
+.portfolio .controls button {
     background: none;
     border: none;
     color: white;
@@ -88,16 +249,16 @@
     font-size: 16px;
 }
 
-.controls button:hover {
+.portfolio .controls button:hover {
     color: var(--color-dark);
 }
 
-.controls input[type='range'] {
+.portfolio .controls input[type='range'] {
     margin: 0 10px;
     cursor: pointer;
 }
 
-.slider {
+.portfolio .slider {
     -webkit-appearance: none;
     width: 100px;
     height: 8px;
@@ -110,11 +271,11 @@
     padding: 0;
 }
 
-.slider:hover {
+.portfolio .slider:hover {
     opacity: 1;
 }
 
-.slider::-webkit-slider-thumb {
+.portfolio .slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 16px;
@@ -124,10 +285,50 @@
     border-radius: 50%;
 }
 
-.slider::-moz-range-thumb {
+.portfolio .slider::-moz-range-thumb {
     width: 16px;
     height: 16px;
     background: var(--color-dark);
     cursor: pointer;
     border-radius: 50%;
+}
+
+/* Reset from index.css */
+
+::-webkit-scrollbar.portfolio  {
+    width: 0;
+    height: 0;
+}
+
+.portfolio a:link,
+.portfolio a:visited {
+    font-weight: 400;
+}
+
+/* Special styles : rotate-content & photo-content  */
+.portfolio :global(.rotate-content) :global(.content-style) {
+    transform: rotate(-2deg);
+    background-color: var(--color-portfolio_theme);
+    border-radius: 2px;
+}
+
+.portfolio :global(.rotate-content) :global(.content-style) > li div {
+    transform: rotate(2deg);
+}
+
+.portfolio :global(.rotate-content) :global(.content-style) > div {
+    transform: rotate(2deg);
+}
+
+.portfolio :global(.photo-content) :global(.content-style) {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px #0003;
+}
+
+.portfolio :global(.photo-content) :global(.content-style) img,
+.portfolio :global(.photo-content) :global(.content-style) > div {
+    box-shadow: none;
 }

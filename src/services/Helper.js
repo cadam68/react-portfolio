@@ -90,6 +90,17 @@ export const changeTheme = newTheme => {
   root.style.setProperty("--font-family", newTheme?.fontFamily ? newTheme?.fontFamily : themes.light.fontFamily);
 };
 
+export const changePortfolioTheme = newTheme => {
+  // Access the root element
+  const root = document.documentElement;
+
+  // Change the CSS custom properties
+  if (newTheme?.colorTheme) root.style.setProperty("--color-portfolio_theme", newTheme.colorTheme);
+  if (newTheme?.colorThemeStrong) root.style.setProperty("--color-portfolio_theme_strong", newTheme.colorThemeStrong);
+  if (newTheme?.colorBackground) root.style.setProperty("--color-portfolio_background", newTheme.colorBackground);
+  if (newTheme?.colorHeaderBackground) root.style.setProperty("--color-portfolio_header_background", newTheme.colorHeaderBackground);
+};
+
 export const changeFontFamily = newFontFamily => {
   const root = document.documentElement;
   root.style.setProperty("--font-family", newFontFamily ? newFontFamily : "white");
@@ -148,6 +159,15 @@ export const themes = {
     fontFamily: "Poppins, Sans-serif",
   },
   random: null,
+};
+
+export const themes_portfolio = {
+  default: {
+    colorTheme: "#2F80ED",
+    colorThemeStrong: "#185ABD",
+    colorBackground: "#fdfdfd",
+    colorHeaderBackground: "#ffffff",
+  },
 };
 
 export const capitalizeAfterPeriod = inputString => {
@@ -328,16 +348,15 @@ export const validateSchema = jsonObj => {
         palette: {
           type: ["object", "null"],
           properties: {
-            colorLightest: { type: "string" },
-            colorLight: { type: "string" },
-            colorMedium: { type: "string" },
-            colorDark: { type: "string" },
+            colorTheme: { type: "string" },
+            colorThemeStrong: { type: "string" },
             colorBackground: { type: "string" },
-            fontFamily: { type: "string" },
+            colorHeaderBackground: { type: "string" },
           },
-          required: ["colorLightest", "colorLight", "colorMedium", "colorDark", "colorBackground"],
+          required: ["colorTheme", "colorThemeStrong"],
           additionalProperties: false,
         },
+        style: { type: ["string", "null"], enum: ["rotate-content", "photo-content"] },
       },
       required: ["userId", "name", "email", "title", "subTitle", "downloadReferences"],
       additionalProperties: false,

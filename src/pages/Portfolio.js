@@ -14,9 +14,7 @@ import { FetchService } from "../services/FetchService";
 import MarkdownDisplay from "../components/portfolio/MarkdownDisplay";
 import UseLocalStorageState from "../hooks/UseLocalStorageState";
 import Carousel from "../components/portfolio/Carousel";
-import { changeTheme, themes } from "../services/Helper";
-import PortfolioHeader from "../components/portfolio/PortfolioHeader";
-import SpinnerFullPage from "../components/divers/SpinnerFullPage";
+import { changePortfolioTheme, changeTheme, getFilteredLanguages, themes, themes_portfolio } from "../services/Helper";
 
 const logger = Log("Portfolio");
 
@@ -42,6 +40,7 @@ const Portfolio = () => {
   const playerRef = useRef(null);
   const [controlsVisible, setControlsVisible] = useState(true);
   const [settings, setSettings] = UseLocalStorageState("portfolio-settings", { visited: [] });
+  const [filteredLanguages, setFilteredLanguages] = useState({});
 
   const renderItemsTypes = ["video", "card", "carousel"];
 
@@ -84,16 +83,17 @@ const Portfolio = () => {
       navigate("/portfolio", { replace: true });
       return;
     }
+
     if (!portfolio.downloadUrls.length) return;
     dispatch({ type: "init", payload: { param_lg, param_itemId } });
-    changeTheme({
-      colorLightest: portfolio?.palette?.colorLightest || themes.light.colorLightest,
-      colorLight: portfolio?.palette?.colorLight || themes.light.colorLight,
-      colorMedium: portfolio?.palette?.colorMedium || themes.light.colorMedium,
-      colorDark: portfolio?.palette?.colorDark || themes.light.colorDark,
-      colorBackground: portfolio?.palette?.colorBackground || themes.light.colorBackground,
-      fontFamily: portfolio?.palette?.fontFamily || themes.light.fontFamily,
+
+    changePortfolioTheme({
+      colorTheme: portfolio?.palette?.colorTheme || themes_portfolio.default.colorTheme,
+      colorThemeStrong: portfolio?.palette?.colorThemeStrong || themes_portfolio.default.colorThemeStrong,
+      colorBackground: portfolio?.palette?.colorBackground || themes_portfolio.default.colorBackground,
+      colorHeaderBackground: portfolio?.palette?.colorHeaderBackground || themes_portfolio.default.colorHeaderBackground,
     });
+    setFilteredLanguages(getFilteredLanguages(portfolio?.downloadReferences));
   }, [portfolio, param_lg, param_itemId]);
 
   useEffect(() => {
@@ -149,70 +149,123 @@ const Portfolio = () => {
     }
   };
 
+  const displayLogo = label => {
+    if (!label) return;
+    const title = label.toUpperCase();
+    return (
+      <div className={styles.logo}>
+        <span>{title[0]}</span> {title.slice(1)}
+      </div>
+    );
+  };
+
+  const displayLinks = () => {
+    const links = state.items.filter(item => item.type && !/^\[.*\]$/.test(item.id));
+    if (links.length > 1)
+      return links.map(item => (
+        <li key={item.id}>
+          <a
+            className={`${state.itemId === item.id ? "disabled" : ""}`}
+            onClick={() => {
+              if (renderItemsTypes.includes(item.type)) {
+                if (/^\[.*\]$/.test(state.itemId)) dispatch({ type: "init", payload: { param_lg, param_itemId: item.id } });
+                else navigate(`/portfolio/${userId}/${state.lg}/${item.id}`, { replace: true });
+              } else if (item.type === "file") {
+                downloadFileHandler(item.url, item.target.split("/").pop());
+              } else if (item.type === "url") {
+                window.open(item.url, "_blank", "noopener,noreferrer");
+              } else if (item.type === "mailto") {
+                window.location.href = item.url;
+              }
+            }}>
+            {item.label}
+          </a>
+        </li>
+      ));
+  };
+
+  const displayLanguage = () => {
+    return (
+      Object.keys(filteredLanguages)?.length > 1 && (
+        <Button
+          className={`button-shadow button-big`}
+          onClick={() => {
+            const availableLanguages = Object.keys(filteredLanguages);
+            const i = (availableLanguages.indexOf(i18n.resolvedLanguage) + 1) % availableLanguages.length;
+            i18n.changeLanguage(availableLanguages[i]);
+          }}>
+          {filteredLanguages[i18n.resolvedLanguage]}
+        </Button>
+      )
+    );
+  };
+
   if (!state.items) return;
   if (!settings?.visited?.includes(userId)) setSettings({ ...settings, visited: [...settings.visited, userId] });
 
-  // if (isLoading) return <SpinnerFullPage />;
-
   return (
-    <>
-      <PortfolioHeader />
-      <section className={styles.navigation}>
-        {state.items
-          .filter(item => item.type && !/^\[.*\]$/.test(item.id))
-          .map(item => (
-            <Button
-              className={`button-outline button-small ${state.itemId === item.id ? "disabled" : ""}`}
-              key={item.id}
-              onClick={() => {
-                if (renderItemsTypes.includes(item.type)) {
-                  if (/^\[.*\]$/.test(state.itemId)) dispatch({ type: "init", payload: { param_lg, param_itemId: item.id } });
-                  else navigate(`/portfolio/${userId}/${state.lg}/${item.id}`, { replace: true });
-                } else if (item.type === "file") {
-                  // window.location.href = `${settings.baseApiUrl}/firebase/download?url=${encodeURIComponent(item.url)}`;
-                  downloadFileHandler(item.url, item.target.split("/").pop());
-                } else if (item.type === "url") {
-                  window.open(item.url, "_blank", "noopener,noreferrer");
-                } else if (item.type === "mailto") {
-                  window.location.href = item.url;
-                }
-              }}>
-              {item.label}
-            </Button>
-          ))}
-      </section>
-      <section className={styles.container}>
-        <Helmet>
-          <title>{portfolio.name} Portfolio</title>
-          <meta name="description" content={`Learn more about ${portfolio.name}`} />
-          <meta name="keywords" content={`${portfolio.name}, ${portfolio.subTitle}`} />
-        </Helmet>
-        <h2>{state.items.find(item => item.id === state.itemId)?.label}</h2>
-        {videoUrl && (
-          <div className={styles.videoWrapper} onMouseEnter={videoHandler.bind(this, "ShowControls")} onMouseLeave={videoHandler.bind(this, "HideControls")}>
-            <ReactPlayer
-              ref={playerRef}
-              url={`${videoUrl}#t=0`}
-              playing={playing}
-              muted={muted}
-              volume={volume}
-              onProgress={videoHandler.bind(this, "handleProgress")}
-              width="100%"
-              height="100%"
-              controls={false} // Hide default controls
-            />
-            <div className={`${styles.controls} ${!controlsVisible && styles.hidden}`}>
-              <button onClick={videoHandler.bind(this, "PlayPause")}>{playing ? <FaPause /> : <FaPlay />}</button>
-              <input className={styles.slider} type="range" min={0} max={1} step="any" value={played} onChange={videoHandler.bind(this, "SeekChange")} style={{ width: "80%" }} />
-              <button onClick={videoHandler.bind(this, "Mute")}>{muted ? <FaVolumeMute /> : <FaVolumeUp />}</button>
-              <input className={styles.slider} type="range" min={0} max={1} step="any" value={volume} onChange={videoHandler.bind(this, "VolumeChange")} style={{ width: "10%" }} />
+    <div className={styles.portfolio}>
+      <Helmet>
+        <title>{portfolio.name} Portfolio</title>
+        <meta name="description" content={`Learn more about ${portfolio.name}`} />
+        <meta name="keywords" content={`${portfolio.name}, ${portfolio.subTitle}`} />
+      </Helmet>
+      <div className={styles.wrapper}>
+        <header>
+          {displayLogo(portfolio.title)}
+          <nav>
+            <ul>
+              {displayLinks()}
+              <li key={"lg"}>{displayLanguage()}</li>
+            </ul>
+          </nav>
+        </header>
+        <div className={styles.container}>
+          {videoUrl && (
+            <div className={`${styles.mainContent} ${styles.center} ${portfolio.style ?? ""}`}>
+              <h1>{state.items.find(item => item.id === state.itemId)?.label}</h1>
+              <div className={"content-style"}>
+                <div className={styles.videoWrapper} onMouseEnter={videoHandler.bind(this, "ShowControls")} onMouseLeave={videoHandler.bind(this, "HideControls")}>
+                  <ReactPlayer
+                    ref={playerRef}
+                    url={`${videoUrl}#t=0`}
+                    playing={playing}
+                    muted={muted}
+                    volume={volume}
+                    onProgress={videoHandler.bind(this, "handleProgress")}
+                    height="100%"
+                    width="100%"
+                    controls={false} // Hide default controls
+                  />
+                  <div className={`${styles.controls} ${!controlsVisible && styles.hidden}`}>
+                    <button onClick={videoHandler.bind(this, "PlayPause")}>{playing ? <FaPause /> : <FaPlay />}</button>
+                    <input className={styles.slider} type="range" min={0} max={1} step="any" value={played} onChange={videoHandler.bind(this, "SeekChange")} style={{ width: "80%" }} />
+                    <button onClick={videoHandler.bind(this, "Mute")}>{muted ? <FaVolumeMute /> : <FaVolumeUp />}</button>
+                    <input className={styles.slider} type="range" min={0} max={1} step="any" value={volume} onChange={videoHandler.bind(this, "VolumeChange")} style={{ width: "10%" }} />
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        )}
-        {cardUrl && <MarkdownDisplay filePath={cardUrl} />}
-        {carousel && <Carousel images={carousel} showButtons={false} speed={6} />}
-      </section>
-    </>
+          )}
+          {cardUrl && (
+            <div className={`${styles.mainContent} ${portfolio.style ?? ""}`}>
+              <MarkdownDisplay filePath={cardUrl} />
+            </div>
+          )}
+          {carousel && (
+            <div className={`${styles.mainContent} ${styles.center} ${portfolio.style ?? ""}`}>
+              <h1>{state.items.find(item => item.id === state.itemId)?.label}</h1>
+              <div className={"content-style"}>
+                <Carousel images={carousel} showButtons={false} speed={6} />
+              </div>
+            </div>
+          )}
+        </div>
+        <footer className={styles.footer}>
+          <p>&copy; 2024 {portfolio.name} Portfolio. All Rights Reserved.</p>
+        </footer>
+      </div>
+    </div>
   );
 };
 
