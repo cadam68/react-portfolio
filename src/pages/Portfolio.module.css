@@ -214,7 +214,7 @@
     box-shadow: 0 4px 8px #0003;
     background-color: var(--color-dark--2);
     width: 80vw;
-    height: 45vw;
+    height: auto;
     max-width: 800px;
     max-height: 450px;
     margin: auto;
@@ -334,6 +334,12 @@
 }
 
 @media screen and (max-width: 900px) {
+
+    .portfolio .container,
+    .portfolio header {
+        flex-direction: column;
+    }
+
     .portfolio header .logo {
         font-size: 1.6rem;
     }
@@ -347,11 +353,16 @@
         height: 3rem;
     }
 
-    .portfolio .mainContent h1 {
-        font-size: 24px;
+    .portfolio .mainContent {
+        margin-top: 2rem;
     }
 
-    .portfolio {
-        font-size: 1.2rem;
+    .portfolio .mainContent h1 {
+        font-size: 2rem;
     }
+
+    .portfolio footer {
+        font-size: 1rem;
+    }
+
 }
