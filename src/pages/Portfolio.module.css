@@ -341,7 +341,8 @@
     }
 
     .portfolio header .logo {
-        font-size: 1.6rem;
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
     }
 
     .portfolio header nav ul li a {
@@ -362,7 +363,7 @@
     }
 
     .portfolio footer {
-        font-size: 1rem;
+        font-size: 1.2rem;
     }
 
 }
