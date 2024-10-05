@@ -5,6 +5,7 @@
     color: #fff;
     padding: 20px 40px;
     font-family: Poppins, sans-serif;
+    width: inherit;
 }
 
 .footer em {
@@ -61,8 +62,6 @@
     cursor: default;
     pointer-events: none;
 }
-
-
 
 .footerBottom {
     text-align: center;
