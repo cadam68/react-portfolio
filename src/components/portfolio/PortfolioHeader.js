@@ -5,6 +5,7 @@ import { useDebugContext } from "../../contexts/DebugContext";
 import useComponentTranslation from "../../hooks/useComponentTranslation";
 import { useAppContext } from "../../contexts/AppContext";
 import { getFilteredLanguages } from "../../services/Helper";
+import styles from "./PortfolioHeader.module.css";
 
 const PortfolioHeader = () => {
   const navigate = useNavigate();
@@ -18,13 +19,13 @@ const PortfolioHeader = () => {
   const filteredLanguages = getFilteredLanguages(portfolio?.downloadReferences);
 
   return (
-    <header className={"portfolio-header"}>
+    <header className={styles.portfolioHeader}>
       <div>
         <h2>{portfolio?.title}</h2>
         <h6>{portfolio?.subTitle}</h6>
       </div>
 
-      <div className={"floatingBanner"}>
+      <div className={styles.floatingBanner}>
         {Object.keys(filteredLanguages)?.length > 1 ? (
           <Hover caption={t("caption_changeLanguage")}>
             <Button
@@ -33,8 +34,7 @@ const PortfolioHeader = () => {
                 const availableLanguages = Object.keys(filteredLanguages);
                 const i = (availableLanguages.indexOf(i18n.resolvedLanguage) + 1) % availableLanguages.length;
                 i18n.changeLanguage(availableLanguages[i]);
-              }}
-            >
+              }}>
               {filteredLanguages[i18n.resolvedLanguage]}
             </Button>
           </Hover>

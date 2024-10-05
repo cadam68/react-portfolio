@@ -1,14 +1,12 @@
-/* src/components/AboutUs.module.css */
-
 
 .loginContainer {
     background-color: white;
-    padding: 20px;
+    padding: 2rem;
     border-radius: 8px;
     box-shadow: var(--box-shadow-middle);
-    width: 320px;
+    width: 32rem;
     text-align: center;
-    margin: 0 auto;
+    margin: 8rem auto;
 }
 
 .icon {
@@ -19,15 +17,15 @@
 .inputContainer {
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 1.5rem;
     border: 1px solid #b3c0d1;
     border-radius: 5px;
-    padding: 10px;
+    padding: 1rem;
     background-color: #f7f9fc;
 }
 
 .inputIcon {
-    margin-right: 10px;
+    margin-right: 1rem;
     color: #5c93c5;
 }
 
@@ -35,10 +33,10 @@
     background-color: #418bca;
     color: white;
     border: none;
-    padding: 10px;
+    padding: 1rem;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 1.6rem;
     width: 100%;
     transition: background-color 0.3s;
 }
@@ -51,11 +49,11 @@
     border: none;
     outline: none;
     flex: 1;
-    font-size: 16px;
+    font-size: 1.6rem;
     background-color: transparent;
 }
 
 p.errMessage {
     color: red;
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
 }

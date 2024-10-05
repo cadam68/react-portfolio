@@ -1,0 +1,38 @@
+
+/* Header */
+.portfolioHeader, .header {
+    color: var(--color-dark);
+    text-align: center;
+    font-size: 3.6rem;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.portfolioHeader {
+    padding-top: 2rem;
+    width: 100vw;
+    background-color: var(--color-background);
+    margin-bottom: 0;
+    padding-bottom: 2rem;
+    /* box-shadow: 0 0 2px rgba(0, 0, 0, 0.06); */
+}
+
+.portfolioHeader .floatingBanner {
+    position: absolute;
+    top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+    right: 5rem;
+}
+
+.portfolioHeader h1, .header h1 {
+    font-size: 1.6em;
+}
+
+.portfolioHeader h6, .header h6 {
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5rem;
+    font-weight: 400;
+}

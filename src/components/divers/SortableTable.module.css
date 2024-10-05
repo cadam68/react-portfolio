@@ -1,15 +1,16 @@
 /* Minimalist CSS for the SortableTable */
+
 .sortableTable table {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 16px;
+    margin: 2rem 0;
+    font-size: 1.6rem;
     font-family: Arial, sans-serif;
     /* table-layout: fixed; /* Enforces consistent column widths */
 }
 
 .sortableTable th, .sortableTable td {
-    padding: 12px 15px;
+    padding: 1.2rem 1.5rem;
     border: 1px solid #ddd;
     text-align: left;
     overflow: hidden;
@@ -35,12 +36,12 @@
 }
 
 .sortableTable button {
-    padding: 10px 20px;
-    margin: 10px 5px;
+    padding: 1rem 2rem;
+    margin: 1rem 0.5rem;
     border: none;
     background-color: #007BFF;
     color: white;
-    font-size: 14px;
+    font-size: 1.4rem;
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.3s ease;
@@ -56,7 +57,17 @@
 }
 
 .sortableTable span {
-    margin: 0 10px;
-    font-size: 14px;
+    margin: 0 1rem;
+    font-size: 1.4rem;
     color: #555;
+}
+
+@media screen and (max-width: 1100px) {
+    .sortableTable table {
+        font-size: 1.4rem;
+    }
+
+    .sortableTable button {
+        padding: 0.8rem 1.8rem;
+    }
 }

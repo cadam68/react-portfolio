@@ -4,10 +4,10 @@
 
 .errorMessage {
     font-style: italic;
-    font-size: 10px;
+    font-size: 1rem;
     position: absolute;
-    bottom: -14px;
-    left: 10px;
+    bottom: -1.4rem;
+    left: 1rem;
     width: 20rem;
 }
 

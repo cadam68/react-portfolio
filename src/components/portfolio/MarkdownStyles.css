@@ -37,19 +37,19 @@ color: var(--color-portfolio_text);
     height: auto;
 
     border-radius: 2px;
-    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.3); /* Shadow effect */
+    box-shadow: 1rem 1rem 2rem rgba(0, 0, 0, 0.3); /* Shadow effect */
     border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .markdown-content div.card p {
-    font-size: 18px;
+    font-size: 1.8rem;
     line-height: 1.6;
-    margin: 8px 0 0;
+    margin: 0.8rem 0 0;
 }
 
 .markdown-content div.card em {
     color: var(--color-portfolio_theme_strong);
-    font-size: 24px;
+    font-size: 2.4rem;
     font-weight: 500;
 }
 
@@ -66,7 +66,7 @@ color: var(--color-portfolio_text);
     list-style-type: none;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 2rem;
 }
 
 .markdown-content div.portfolio-card.col2 ul {
@@ -106,7 +106,7 @@ color: var(--color-portfolio_text);
 .markdown-content div.two-columns {
     display: block;
     column-count: 2;
-    column-gap: 30px;
+    column-gap: 3rem;
     column-rule: 1px solid #ccc;
 }
 

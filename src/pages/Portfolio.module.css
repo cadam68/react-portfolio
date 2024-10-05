@@ -7,7 +7,6 @@
     --color-portfolio_text_strong: #333;
 }
 
-/* General styles for the entire layout */
 .portfolio {
     font-family: 'Arial', sans-serif;
     font-size: 1.4rem;
@@ -27,7 +26,7 @@
 /* The content will grow to fill the space before the footer */
 .portfolio .container {
     flex: 1;
-    padding: 20px 40px;
+    padding: 2rem 4rem;
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
@@ -42,13 +41,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 40px;
+    padding: 2rem 4rem;
     background-color: var(--color-portfolio_header_background);
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.05);
 }
 
 .portfolio header .logo {
-    font-size: 24px;
+    font-size: 2.4rem;
     font-weight: bold;
     color: var(--color-portfolio_theme);
 }
@@ -68,9 +67,8 @@
     display: flex;
     align-items: center;
     list-style: none;
-    gap: 20px;
+    gap: 2rem;
 }
-
 
 .portfolio header nav ul li a {
     color: var(--color-portfolio_text_strong);
@@ -81,117 +79,37 @@
 }
 
 .portfolio header nav ul li a:hover {
-    border-bottom: 2px solid var(--color-portfolio_theme);
+    border-bottom: 0.2rem solid var(--color-portfolio_theme);
 }
 
 .portfolio header nav ul li a:global(.disabled) {
     color: var(--color-portfolio_theme_strong);
-    border-bottom: 2px solid var(--color-portfolio_theme_strong);
+    border-bottom: 0.2rem solid var(--color-portfolio_theme_strong);
     cursor: default;
     pointer-events: none;
 }
 
-
 /* main section */
 .portfolio .mainContent {
     display: flex;
-    /* justify-content: space-between; */
     align-items: flex-start;
-    margin-top: 40px;
+    margin-top: 4rem;
     column-gap: 4rem;
     width: 100%;
 }
 
-/* Left content for text and buttons */
-.portfolio .mainContent .left-content {
-    /* max-width: 50%; */
-}
-
 .portfolio .mainContent h1 {
-    font-size: 36px;
+    font-size: 3.6rem;
     color: var(--color-portfolio_text_strong);
-    margin-bottom: 30px;
-}
-
-.portfolio .mainContent .left-content p {
-    color: var(--color-portfolio_text);
-    font-size: 18px;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
-
-.portfolio .mainContent .left-content .buttons {
-    display: flex;
-    gap: 15px;
-}
-
-.portfolio .mainContent .left-content .buttons a {
-    text-decoration: none;
-    padding: 12px 24px;
-    border-radius: 2px;
-    transition: background-color 0.3s ease;
-
-    color: var(--color-portfolio_theme);
-    background-color: white;
-    box-shadow:none;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-.portfolio .mainContent .left-content .buttons a:hover {
-    color: var(--color-portfolio_theme_strong);
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.portfolio .mainContent .left-content .buttons a.strong {
-    color: white;
-    background-color: var(--color-portfolio_theme);
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
-    border:none;
-}
-
-.portfolio .mainContent .left-content .buttons a.strong:hover {
-    background-color: var(--color-portfolio_theme_strong);
-}
-
-/* Right content for image */
-.portfolio .mainContent .right-content {
-    position: relative;
-}
-
-.portfolio .mainContent .right-content img {
-    width: 350px;
-    border-radius: 2px;
-    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.3); /* Shadow effect */
-    border: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-/* Tag styling for elements overlapping the image */
-.portfolio .mainContent .right-content .tag {
-    position: absolute;
-    background-color: var(--color-portfolio_theme_strong);
-    color: white;
-    padding: 8px 16px;
-    font-size: 14px;
-    font-weight: bold;
-    border-radius: 2px;
-}
-
-.portfolio .mainContent .right-content .tag-1 {
-    top: 10px;
-    left: -40px;
-}
-
-.portfolio .mainContent .right-content .tag-2 {
-    bottom: 20px;
-    right: -40px;
+    margin-bottom: 3rem;
 }
 
 .portfolio .footer {
     text-align: center;
     border-top: 1px solid #ddd;
-    margin-top: 40px;
+    margin-top: 4rem;
     height: auto;
-    padding: 10px;
+    padding: 1rem;
 }
 
 .portfolio .footer p {
@@ -207,11 +125,10 @@
 
 /* Video Control */
 .portfolio .videoWrapper {
-    /* height: 60vh; */
     border-radius: 3px;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 4px 8px #0003;
+    box-shadow: 0 0.4rem 0.8rem #0003;
     background-color: var(--color-dark--2);
     width: 80vw;
     height: 45vw;
@@ -229,7 +146,7 @@
     justify-content: center;
     align-items: center;
     background: rgba(0, 0, 0, 0.3);
-    padding: 10px;
+    padding: 1rem;
     opacity: 1;
     pointer-events: all;
     transition: opacity 2s ease;
@@ -244,9 +161,9 @@
     background: none;
     border: none;
     color: white;
-    padding: 10px;
+    padding: 1rem;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 1.6rem;
 }
 
 .portfolio .controls button:hover {
@@ -254,20 +171,20 @@
 }
 
 .portfolio .controls input[type='range'] {
-    margin: 0 10px;
+    margin: 0 1rem;
     cursor: pointer;
 }
 
 .portfolio .slider {
     -webkit-appearance: none;
     width: 100px;
-    height: 8px;
+    height: 0.8rem;
     background: #ddd;
     outline: none;
     opacity: 0.7;
     transition: opacity .2s;
-    border-radius: 5px;
-    margin: 0 10px;
+    border-radius: 0.5rem;
+    margin: 0 1rem;
     padding: 0;
 }
 
@@ -278,23 +195,22 @@
 .portfolio .slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 16px;
-    height: 16px;
+    width: 1.6rem;
+    height: 1.6rem;
     background: var(--color-dark);
     cursor: pointer;
     border-radius: 50%;
 }
 
 .portfolio .slider::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
+    width: 1.6rem;
+    height: 1.6rem;
     background: var(--color-dark);
     cursor: pointer;
     border-radius: 50%;
 }
 
 /* Reset from index.css */
-
 ::-webkit-scrollbar.portfolio  {
     width: 0;
     height: 0;
@@ -306,6 +222,7 @@
 }
 
 /* Special styles : rotate-content & photo-content  */
+
 .portfolio :global(.rotate-content) :global(.content-style) {
     transform: rotate(-2deg);
     background-color: var(--color-portfolio_theme);
@@ -322,10 +239,10 @@
 
 .portfolio :global(.photo-content) :global(.content-style) {
     background-color: #ffffff;
-    padding: 20px;
+    padding: 2rem;
     border-radius: 3px;
     border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 4px 8px #0003;
+    box-shadow: 0 0.4rem 0.8rem #0003;
 }
 
 .portfolio :global(.photo-content) :global(.content-style) img,
@@ -334,7 +251,6 @@
 }
 
 @media screen and (max-width: 1100px) {
-
     .portfolio .container,
     .portfolio header {
         flex-direction: column;
@@ -366,4 +282,7 @@
         font-size: 1.2rem;
     }
 
+    .portfolio :global(.photo-content) :global(.content-style) {
+        padding: 1.6rem;
+    }
 }

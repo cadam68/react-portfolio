@@ -11,25 +11,19 @@
     display: inline-block;
     width: 100%;
     text-align: left;
-    padding: 10px 10px;
+    padding: 1rem 1rem;
 }
 
 .formGroup select.h3 {
     font-size: 2rem;
     color: var(--color-header);
     font-weight: 800;
-    /*
-    border: 1px solid var(--color-light);
-    border-right: 0;
-    border-left: 0;
-    border-radius: 0;
-    */
-    padding: 0 0 10px 0;
+    padding: 0 0 1rem 0;
     border:0;
 }
 
 .formGroup textarea {
-    height: 200px;
+    height: 20rem;
 }
 
 .portfolioForm {
@@ -58,29 +52,28 @@
 }
 
 .formGroup {
-    margin-bottom: 15px;
+    margin-bottom: 1.5rem;
 }
 
 .formGroup label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 0.5rem;
 }
-
 
 .formGroup .imagePreview {
     display: flex;
     align-items: center;
     justify-content: space-between;
     background-color: #f1f1f1;
-    padding: 10px;
-    margin-bottom: 5px;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .formGroup .removeBtn {
     background-color: red;
     color: white;
     border: none;
-    padding: 5px 10px;
+    padding: 0.5rem 1rem;
     cursor: pointer;
     border-radius: 4px;
 }

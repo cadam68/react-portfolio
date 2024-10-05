@@ -1,4 +1,3 @@
-/* src/components/AboutUs.module.css */
 
 .mission:hover .icon,
 .vision:hover .icon {
@@ -7,14 +6,14 @@
 
  .portfolioList {
     background-color: #fdfdfd;
-    padding: 25px;
+    padding: 2.5rem;
     box-shadow: var(--box-shadow-large);
     border-radius: 6px;
 }
 
 .portfolioList input {
     width: 25rem;
-    padding: 10px 20px;
+    padding: 1rem 2rem;
 }
 
 .content h2 {

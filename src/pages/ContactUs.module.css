@@ -1,16 +1,15 @@
-/* src/components/ContactUs.module.css */
 
 .contactContent {
     display: flex;
     align-items: center;
-    padding: 40px 20px;
-    gap:20px;
+    padding: 4rem 2rem;
+    gap:2rem;
 }
 
 .contactInfo {
     max-width: 800px;
     text-align: left;
-    margin-bottom: 40px;
+    margin-bottom: 4rem;
     flex: 1;
     font-size: 1.6rem;
 }
@@ -18,12 +17,12 @@
 .contactInfo h2 {
     font-size: 3rem;
     color: var(--color-header-dark);
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
     font-weight: 800;
 }
 
 .contactInfo p {
-    margin-bottom: 30px;
+    margin-bottom: 3rem;
 }
 
 .contactDetails {
@@ -32,20 +31,23 @@
 }
 
 .contactDetails p {
-    margin: 10px 0;
+    margin: 1rem 0;
 }
 
 .contactMap {
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
-    padding: 20px 0;
+    padding: 2rem 0;
     flex: 1;
 }
 
-.contactMap h2 {
-    font-size: 2rem;
-    color: var(--color-header);;
-    margin-bottom: 20px;
-    text-align: center;
+@media screen and (max-width: 1100px) {
+    .contactInfo h2 {
+        font-size: 2.6rem;
+    }
+
+    .contactInfo, .contactMap {
+        font-size: 1.4rem;
+    }
 }

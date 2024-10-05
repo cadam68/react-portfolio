@@ -3,8 +3,8 @@
 :root {
     --color-header: #007bff;
     --color-header-dark: #0056b3;
-    --box-shadow-large: 0px 0px 30px -15px rgba(0, 0, 0, 0.29);
-    --box-shadow-middle: 0 0 10px rgba(0, 0, 0, 0.1);
+    --box-shadow-large: 0 0 rem -1.5rem rgba(0, 0, 0, 0.29);
+    --box-shadow-middle: 0 0 1rem rgba(0, 0, 0, 0.1);
 }
 
 .inline-banner {
@@ -17,14 +17,14 @@
 }
 
 .bannerImage {
-    height: 200px;
+    height: 20rem;
     object-fit: contain;
 }
 
 .inline-banner h1 {
     position: absolute;
     top: 50%;
-    left: 40px;
+    left: 4rem;
     transform: translate(0, -50%);
     font-size: 4.4rem;
     margin: 0;
@@ -46,18 +46,18 @@
 }
 
 .inline-content {
-    padding: 40px;
+    padding: 4rem;
 }
 
 .inline-content h2,
 .inline-content h3 {
-    margin-top: 10px;
+    margin-top: 1rem;
     font-size: 3rem;
     font-weight: 800;
     color: var(--color-header);
     border-bottom: 2px solid var(--color-header);
-    padding-bottom: 0px;
-    margin-bottom: 20px;
+    padding-bottom: 0;
+    margin-bottom: 2rem;
     display: inline-block;
 }
 
@@ -69,9 +69,8 @@
 
 
 .inline-content p {
-    margin-bottom: 30px;
+    margin-bottom: 3rem;
     font-size: 1.6rem;
-    /* text-align: justify; */
 }
 
 .inline-popup div {
@@ -91,12 +90,12 @@
 }
 
 .inline-form button {
-    padding: 10px 20px;
-    margin: 10px 5px;
+    padding: 1rem 2rem;
+    margin: 1rem 0.5rem;
     border: none;
     background-color: #007BFF;
     color: white;
-    font-size: 14px;
+    font-size: 1.4rem;
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.3s ease;
@@ -120,7 +119,7 @@
 }
 
 .inline-form button:not(:last-child) {
-    margin-right: 20px;
+    margin-right: 2rem;
 }
 
 .inline-form button:disabled {
@@ -133,8 +132,7 @@
 }
 
 .inline-form span.input {
-    padding: 10px 20px;
-    /* margin: 10px 5px; */
+    padding: 1rem 2rem;
 }
 
 .inline-form .error {
@@ -146,6 +144,18 @@
 
 @media screen and (max-width: 1100px) {
     .bannerImage {
-        height: 150px;
+        height: 15rem;
+    }
+
+    .inline-banner h1 {
+        font-size: 3.6rem;
+    }
+
+    .inline-content h2, .inline-content h3 {
+        font-size: 2.6rem;
+    }
+
+    .inline-content p {
+        font-size: 1.4rem;
     }
 }
