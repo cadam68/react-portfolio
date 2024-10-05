@@ -421,7 +421,7 @@ div.popup {
 @media screen and (max-width: 1100px) {
 
   html {
-    -webkit-text-size-adjust: 100%;
+    -webkit-text-size-adjust: none;
   }
 }
 
