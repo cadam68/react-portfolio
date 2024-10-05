@@ -72,3 +72,9 @@
 .footerBottom p {
     margin: 0;
 }
+
+@media screen and (max-width: 1100px) {
+    .quickLinks {
+        display: none;
+    }
+}

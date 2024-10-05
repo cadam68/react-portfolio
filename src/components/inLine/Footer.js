@@ -14,7 +14,7 @@ const Footer = ({ links }) => {
             <em>In-Line</em> is a dynamic and innovative company dedicated to providing high-quality and cutting-edge technology products to our valued customers across the globe.
           </p>
         </div>
-        <div className={styles.footerSection}>
+        <div className={styles.footerSection + " " + styles.quickLinks}>
           <h4>Quick Links</h4>
           <ul>
             {links
