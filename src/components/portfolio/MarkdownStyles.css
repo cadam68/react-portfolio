@@ -120,10 +120,6 @@ color: var(--color-portfolio_text);
 
 @media screen and (max-width: 1100px) {
 
-    html {
-        -webkit-text-size-adjust: 100%;
-    }
-
     .markdown-content div.card h1 {
         font-size: 22px;
     }
