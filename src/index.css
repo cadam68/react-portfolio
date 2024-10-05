@@ -115,7 +115,7 @@ a.button button {
   color: #343a40;
 }
 
-.button-outline {
+.button-shadow {
   border: none;
   cursor: pointer;
   background-color: transparent;

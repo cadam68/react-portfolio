@@ -44,7 +44,11 @@ color: var(--color-portfolio_text);
 .markdown-content div.card p {
     font-size: 1.8rem;
     line-height: 1.6;
-    margin: 0.8rem 0 0;
+    margin-bottom: 1.8rem;
+}
+
+.markdown-content div.card p:last-child {
+    margin-bottom: 0;
 }
 
 .markdown-content div.card em {
@@ -120,13 +124,17 @@ color: var(--color-portfolio_text);
 
 @media screen and (max-width: 1100px) {
 
+    .markdown-content div.card:not(:last-child) {
+        margin-bottom: 4.5rem;
+    }
+
     .markdown-content div.card h1 {
         font-size: 2.6rem;
     }
 
     .markdown-content div.card p {
         font-size: 1.4rem;
-        margin: 2rem 0 0;
+        margin-bottom: 2rem;
     }
 
     .markdown-content div.card em {
