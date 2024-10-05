@@ -3,9 +3,8 @@
 .footer {
     background-color: var(--color-dark--0);
     color: #fff;
-    padding: 20px 40px;
+    /* padding: 20px 40px;*/
     font-family: Poppins, sans-serif;
-    width: 100%;
 }
 
 .footer em {

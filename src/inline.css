@@ -38,6 +38,7 @@
 }
 
 .inline-section {
+    overflow: auto;
     color: var(--color-dark--2);
     line-height: 1.6;
     margin: 0;
