@@ -121,16 +121,16 @@ color: var(--color-portfolio_text);
 @media screen and (max-width: 1100px) {
 
     .markdown-content div.card h1 {
-        font-size: 2rem;
+        font-size: 2rem !important;
     }
 
     .markdown-content div.card p {
-        font-size: 1.4rem;
+        font-size: 1.2rem !important;
         margin: 2rem 0 0;
     }
 
     .markdown-content div.card em {
-        font-size: 1.4rem;
+        font-size: 1.2rem !important;
         font-weight: 600;
     }
 
