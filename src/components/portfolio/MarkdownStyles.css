@@ -27,7 +27,7 @@ color: var(--color-portfolio_text);
 }
 
 .markdown-content div.card-image {
-    width: 300px;
+    width: 260px;
     float: right;
     padding: 0 0 2rem 2rem;
 }
