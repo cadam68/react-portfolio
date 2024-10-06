@@ -31,6 +31,7 @@ const AdminPortfolioPage = () => {
   const { user, logout } = useAuthContext();
   const navigate = useNavigate();
   const { Toast } = useToast();
+  const [submit, setSubmit] = useState(false);
 
   // load portfolio
   useEffect(() => {
@@ -105,6 +106,7 @@ const AdminPortfolioPage = () => {
   const handleSubmit = async event => {
     event.preventDefault();
     try {
+      setSubmit(true);
       const updatedJson = JSON.parse(inputValues.jsonData);
       validateSchema(updatedJson);
       const jsonData = JSON.stringify(updatedJson, null, 2);
@@ -118,6 +120,7 @@ const AdminPortfolioPage = () => {
     } catch (e) {
       setErrorProfile(e.message || "Invalid profile format");
     }
+    setSubmit(false);
   };
 
   const handleFileChange = event => {
@@ -149,6 +152,7 @@ const AdminPortfolioPage = () => {
     }
 
     try {
+      setSubmit(true);
       const data = await FetchService().uploadPortfolioDocument(selectedFile, userId);
       if (!data) throw new Error("Sorry, the file can not be uploaded...");
 
@@ -159,6 +163,7 @@ const AdminPortfolioPage = () => {
     } catch (error) {
       setErrorUpload(error.message);
     }
+    setSubmit(false);
   };
 
   const handleDeletePortfolio = async () => {
@@ -173,7 +178,9 @@ const AdminPortfolioPage = () => {
     }
     //
     try {
+      setSubmit(true);
       const data = await FetchService().deletePortfolio(userId);
+      setSubmit(false);
       if (!data) throw new Error("Sorry, the portfolio can not be deleted...");
       if (data?.error) throw new Error(data.error);
       if (data.message) Toast.info(data.message);
@@ -186,6 +193,7 @@ const AdminPortfolioPage = () => {
       );
       navigate(-1);
     } catch (error) {
+      setSubmit(false);
       if (error.message == "SESSION_EXPIRED") {
         Toast.error("Session Timeout!");
         if (user) logout();
@@ -209,8 +217,8 @@ const AdminPortfolioPage = () => {
           <div>
             <p className={styles.error}>{errorProfile}&nbsp;</p>
             <form className="inline-form" onSubmit={handleSubmit}>
-              <textarea style={{ width: "100%", height: "400px" }} name="jsonData" value={inputValues.jsonData} onBlur={() => setErrorProfile("")} onChange={e => handleInputChange(e, /.*/)} />
-              <button type="submit" disabled={!!errorProfile || !inputValues.jsonData || !hasChanged}>
+              <textarea disabled={submit} style={{ width: "100%", height: "400px" }} name="jsonData" value={inputValues.jsonData} onBlur={() => setErrorProfile("")} onChange={e => handleInputChange(e, /.*/)} />
+              <button type="submit" disabled={!!errorProfile || !inputValues.jsonData || !hasChanged || submit}>
                 Save Changes
               </button>
             </form>
@@ -225,14 +233,14 @@ const AdminPortfolioPage = () => {
             <p className={styles.error}>{errorUpload}&nbsp;</p>
             <div className="inline-form">
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                <button onClick={handleFileUpload} disabled={!selectedFile}>
+                <button disabled={submit} onClick={handleFileUpload} disabled={!selectedFile}>
                   Upload File
                 </button>
-                <button type="button" onClick={handleSelectFile}>
+                <button disabled={submit} type="button" onClick={handleSelectFile}>
                   Select a File
                 </button>
                 <span className="input">{selectedFile?.name || "No file selected"}</span>
-                <input type="file" ref={fileInputRef} onChange={handleFileChange} />
+                <input disabled={submit} type="file" ref={fileInputRef} onChange={handleFileChange} />
               </div>
             </div>
             <div>
@@ -259,7 +267,7 @@ const AdminPortfolioPage = () => {
           <div className={styles.adminPortfolio + " inline-content inline-form"}>
             <div className={"warning"}>
               <div className={styles.error}>{errorDelete}&nbsp;</div>
-              <button onClick={handleDeletePortfolio} type="button">
+              <button disabled={submit} onClick={handleDeletePortfolio} type="button">
                 {`Delete ${userName} Portfolio`.toUpperCase()}
               </button>
             </div>

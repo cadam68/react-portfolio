@@ -221,7 +221,7 @@ const PortfolioCreation = () => {
       <div className={"inline-content " + styles.portfolioCreationContainer}>
         <form onSubmit={handleSubmit} className={styles.portfolioForm + " inline-form"} encType="multipart/form-data">
           <div className={styles.formGroup}>
-            <select className={styles.h3} name="portfolioType" value={formData.portfolioType} onChange={handleInputChange}>
+            <select disabled={submit} className={styles.h3} name="portfolioType" value={formData.portfolioType} onChange={handleInputChange}>
               {Object.keys(portfolioTemplate).map(key => (
                 <option key={key} value={key}>
                   {"Create " + portfolioTemplate[key].name}
