@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from "react";
-import styles from "./Carousel.module.css";
+import styles from "./CarouselPlayer.module.css";
 
-const Carousel = ({ images, speed = 4, showButtons = true }) => {
+const CarouselPlayer = ({ images, speed = 4, showButtons = true }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+      setCurrentIndex(prevIndex => (prevIndex + 1) % images.length);
     }, speed * 1000); // Duration between image changes
 
     return () => clearInterval(interval);
   }, [images.length]);
 
-  const handleDotClick = (index) => {
+  const handleDotClick = index => {
     setCurrentIndex(index);
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
+    setCurrentIndex(prevIndex => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
   };
 
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    setCurrentIndex(prevIndex => (prevIndex + 1) % images.length);
   };
 
   return (
@@ -51,4 +51,4 @@ const Carousel = ({ images, speed = 4, showButtons = true }) => {
   );
 };
 
-export default Carousel;
+export default CarouselPlayer;

@@ -1,0 +1,17 @@
+.footer {
+    text-align: center;
+    border-top: 1px solid #ddd;
+    margin-top: 4rem;
+    height: auto;
+    padding: 1rem;
+}
+
+.footer p {
+    color: var(--color-portfolio_text_strong);;
+}
+
+@media screen and (max-width: 1100px) {
+    footer {
+        font-size: 1.2rem;
+    }
+}

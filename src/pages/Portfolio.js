@@ -4,17 +4,15 @@ import { useAppContext } from "../contexts/AppContext";
 import { Log } from "../services/LogService";
 import { useToast } from "../contexts/ToastContext";
 import styles from "./Portfolio.module.css";
-import ReactPlayer from "react-player";
-import { FaPlay, FaPause, FaVolumeMute, FaVolumeUp } from "react-icons/fa";
 import { Helmet } from "react-helmet";
 import useComponentTranslation from "../hooks/useComponentTranslation";
 import S from "string";
-import Button from "../components/divers/Button";
-import { FetchService } from "../services/FetchService";
-import MarkdownDisplay from "../components/portfolio/MarkdownDisplay";
 import UseLocalStorageState from "../hooks/UseLocalStorageState";
-import Carousel from "../components/portfolio/Carousel";
-import { changePortfolioTheme, changeTheme, getFilteredLanguages, themes, themes_portfolio } from "../services/Helper";
+import { changePortfolioTheme, getFilteredLanguages, themes_portfolio } from "../services/Helper";
+import PortfolioFooter from "../components/portfolio/PortfolioFooter";
+import PortfolioHeader from "../components/portfolio/PortfolioHeader";
+import { settings } from "../Settings";
+import RenderContent from "../components/portfolio/RenderContent";
 
 const logger = Log("Portfolio");
 
@@ -24,25 +22,13 @@ const Portfolio = () => {
   const { userId, lg: param_lg, itemId: param_itemId } = useParams();
 
   const {
-    basicDataService: { basicData },
     portfolioService: { portfolio, setPortfolioId },
-    isLoading,
   } = useAppContext();
   const { Toast } = useToast();
 
-  const [videoUrl, setVideoUrl] = useState();
-  const [cardUrl, setCardUrl] = useState();
-  const [carousel, setCarousel] = useState();
-  const [playing, setPlaying] = useState(false);
-  const [muted, setMuted] = useState(false);
-  const [volume, setVolume] = useState(0.8);
-  const [played, setPlayed] = useState(0);
-  const playerRef = useRef(null);
-  const [controlsVisible, setControlsVisible] = useState(true);
-  const [settings, setSettings] = UseLocalStorageState("portfolio-settings", { visited: [] });
+  const [portfolioSettings, setPortfolioSettings] = UseLocalStorageState("portfolio-settings", { visited: [] });
   const [filteredLanguages, setFilteredLanguages] = useState({});
-
-  const renderItemsTypes = ["video", "card", "carousel"];
+  const [selectedItem, setSelectedItem] = useState(null); // Single state for the selected item
 
   const initialState = { lg: null, itemId: null, items: null };
   const reducer = (state, { type, payload }) => {
@@ -61,8 +47,8 @@ const Portfolio = () => {
           return entry;
         });
 
-        if (!settings?.visited?.includes(userId)) itemId = "[firstTime]";
-        if (!uniqueIds.includes(itemId) || !items.find(item => item.id === itemId && renderItemsTypes.includes(item.type))) itemId = items.find(item => renderItemsTypes.includes(item.type))?.id;
+        if (!portfolioSettings?.visited?.includes(userId)) itemId = "[firstTime]";
+        if (!uniqueIds.includes(itemId) || !items.find(item => item.id === itemId && settings.renderItemsTypes.includes(item.type))) itemId = items.find(item => settings.renderItemsTypes.includes(item.type))?.id;
         return { ...initialState, lg, itemId, items };
       }
 
@@ -78,130 +64,40 @@ const Portfolio = () => {
   }, [userId]);
 
   useEffect(() => {
-    if (!portfolio) return;
-    if (!portfolio.downloadUrls) {
-      navigate("/portfolio", { replace: true });
+    if (!portfolio || !portfolio.downloadUrls || !portfolio.downloadUrls.length) {
+      if (portfolio && !portfolio.downloadUrls) {
+        navigate("/portfolio", { replace: true });
+      }
       return;
     }
-
-    if (!portfolio.downloadUrls.length) return;
     dispatch({ type: "init", payload: { param_lg, param_itemId } });
-
+    setFilteredLanguages(getFilteredLanguages(portfolio?.downloadReferences));
     changePortfolioTheme({
       colorTheme: portfolio?.palette?.colorTheme || themes_portfolio.default.colorTheme,
       colorThemeStrong: portfolio?.palette?.colorThemeStrong || themes_portfolio.default.colorThemeStrong,
       colorBackground: portfolio?.palette?.colorBackground || themes_portfolio.default.colorBackground,
       colorHeaderBackground: portfolio?.palette?.colorHeaderBackground || themes_portfolio.default.colorHeaderBackground,
     });
-    setFilteredLanguages(getFilteredLanguages(portfolio?.downloadReferences));
   }, [portfolio, param_lg, param_itemId]);
 
   useEffect(() => {
     if (!state.lg) return;
-    // console.log(`changeLanguage to ${state.lg}`);
     i18n.changeLanguage(state.lg);
   }, [state.lg]);
 
   useEffect(() => {
     if (!state.items) return;
     const selectedItem = state.items.find(item => item.id === state.itemId);
-    setVideoUrl(selectedItem?.type === "video" ? selectedItem.url : null);
-    setCardUrl(selectedItem?.type === "card" ? selectedItem.url : null);
-    setCarousel(selectedItem?.type === "carousel" ? selectedItem.data : null);
+    setSelectedItem(selectedItem);
   }, [state.itemId, state.lg]);
 
   useEffect(() => {
-    // console.log(`i18n.resolvedLanguage=${i18n.resolvedLanguage}`, state);
     if (!state.lg) return;
     navigate(`/portfolio/${userId}/${i18n.resolvedLanguage}/${param_itemId ? param_itemId : state.itemId}`, { replace: true });
   }, [i18n.resolvedLanguage]);
 
-  const videoHandler = (control, state) => {
-    if (control === "PlayPause") {
-      if (!playing) setControlsVisible(false);
-      setPlaying(!playing);
-    } else if (control === "SeekChange") {
-      setPlayed(parseFloat(state.target.value));
-      playerRef.current.seekTo(parseFloat(state.target.value));
-    } else if (control === "Mute") {
-      setMuted(!muted);
-    } else if (control === "VolumeChange") {
-      setVolume(parseFloat(state.target.value));
-    } else if (control === "ShowControls") {
-      setControlsVisible(true);
-    } else if (control === "HideControls") {
-      if (playing) setControlsVisible(false);
-    } else if (control === "handleProgress") {
-      setPlayed(state.played);
-    } else if (control === "changeVideo") {
-      setPlaying(false);
-      setControlsVisible(true);
-      setVideoUrl(state);
-    }
-  };
-
-  const downloadFileHandler = async (fileUrl, fileName) => {
-    try {
-      await FetchService().getDownloadFile(fileUrl, fileName);
-      Toast.info(`The file ${fileName} is downloaded`);
-    } catch (error) {
-      Toast.error(`The file ${fileName} is not available yet!`);
-    }
-  };
-
-  const displayLogo = label => {
-    if (!label) return;
-    const title = label.toUpperCase();
-    return (
-      <div className={styles.logo}>
-        <span>{title[0]}</span> {title.slice(1)}
-      </div>
-    );
-  };
-
-  const displayLinks = () => {
-    const links = state.items.filter(item => item.type && !/^\[.*\]$/.test(item.id));
-    if (links.length > 1)
-      return links.map(item => (
-        <li key={item.id}>
-          <a
-            className={`${state.itemId === item.id ? "disabled" : ""}`}
-            onClick={() => {
-              if (renderItemsTypes.includes(item.type)) {
-                if (/^\[.*\]$/.test(state.itemId)) dispatch({ type: "init", payload: { param_lg, param_itemId: item.id } });
-                else navigate(`/portfolio/${userId}/${state.lg}/${item.id}`, { replace: true });
-              } else if (item.type === "file") {
-                downloadFileHandler(item.url, item.target.split("/").pop());
-              } else if (item.type === "url") {
-                window.open(item.url, "_blank", "noopener,noreferrer");
-              } else if (item.type === "mailto") {
-                window.location.href = item.url;
-              }
-            }}>
-            {item.label}
-          </a>
-        </li>
-      ));
-  };
-
-  const displayLanguage = () => {
-    return (
-      Object.keys(filteredLanguages)?.length > 1 && (
-        <Button
-          className={`button-shadow button-big`}
-          onClick={() => {
-            const availableLanguages = Object.keys(filteredLanguages);
-            const i = (availableLanguages.indexOf(i18n.resolvedLanguage) + 1) % availableLanguages.length;
-            i18n.changeLanguage(availableLanguages[i]);
-          }}>
-          {filteredLanguages[i18n.resolvedLanguage]}
-        </Button>
-      )
-    );
-  };
-
-  if (!state.items) return;
-  if (!settings?.visited?.includes(userId)) setSettings({ ...settings, visited: [...settings.visited, userId] });
+  if (!state.items || !selectedItem) return null;
+  if (!portfolioSettings?.visited?.includes(userId)) setPortfolioSettings({ ...portfolioSettings, visited: [...portfolioSettings.visited, userId] });
 
   return (
     <div className={styles.portfolio}>
@@ -211,59 +107,11 @@ const Portfolio = () => {
         <meta name="keywords" content={`${portfolio.name}, ${portfolio.subTitle}`} />
       </Helmet>
       <div className={styles.wrapper}>
-        <header>
-          {displayLogo(portfolio.title)}
-          <nav>
-            <ul>
-              {displayLinks()}
-              <li key={"lg"}>{displayLanguage()}</li>
-            </ul>
-          </nav>
-        </header>
+        <PortfolioHeader portfolio={portfolio} state={state} filteredLanguages={filteredLanguages} />
         <div className={styles.container}>
-          {videoUrl && (
-            <div className={`${styles.mainContent} ${styles.center} ${portfolio.style ?? ""}`}>
-              <h1>{state.items.find(item => item.id === state.itemId)?.label}</h1>
-              <div className={"content-style"}>
-                <div className={styles.videoWrapper} onMouseEnter={videoHandler.bind(this, "ShowControls")} onMouseLeave={videoHandler.bind(this, "HideControls")}>
-                  <ReactPlayer
-                    ref={playerRef}
-                    url={`${videoUrl}#t=0`}
-                    playing={playing}
-                    muted={muted}
-                    volume={volume}
-                    onProgress={videoHandler.bind(this, "handleProgress")}
-                    height="100%"
-                    width="100%"
-                    controls={false} // Hide default controls
-                  />
-                  <div className={`${styles.controls} ${!controlsVisible && styles.hidden}`}>
-                    <button onClick={videoHandler.bind(this, "PlayPause")}>{playing ? <FaPause /> : <FaPlay />}</button>
-                    <input className={styles.slider} type="range" min={0} max={1} step="any" value={played} onChange={videoHandler.bind(this, "SeekChange")} style={{ width: "80%" }} />
-                    <button onClick={videoHandler.bind(this, "Mute")}>{muted ? <FaVolumeMute /> : <FaVolumeUp />}</button>
-                    <input className={styles.slider} type="range" min={0} max={1} step="any" value={volume} onChange={videoHandler.bind(this, "VolumeChange")} style={{ width: "10%" }} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-          {cardUrl && (
-            <div className={`${styles.mainContent} ${portfolio.style ?? ""}`}>
-              <MarkdownDisplay filePath={cardUrl} />
-            </div>
-          )}
-          {carousel && (
-            <div className={`${styles.mainContent} ${styles.center} ${portfolio.style ?? ""}`}>
-              <h1>{state.items.find(item => item.id === state.itemId)?.label}</h1>
-              <div className={"content-style"}>
-                <Carousel images={carousel} showButtons={false} speed={6} />
-              </div>
-            </div>
-          )}
+          <RenderContent item={selectedItem} style={portfolio.style} />
         </div>
-        <footer className={styles.footer}>
-          <p>&copy; 2024 {portfolio.name} Portfolio. All Rights Reserved.</p>
-        </footer>
+        <PortfolioFooter portfolio={portfolio} />
       </div>
     </div>
   );

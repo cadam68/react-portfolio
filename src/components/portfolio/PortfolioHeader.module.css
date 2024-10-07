@@ -1,38 +1,73 @@
-
-/* Header */
-.portfolioHeader, .header {
-    color: var(--color-dark);
-    text-align: center;
-    font-size: 3.6rem;
-    margin-bottom: 2rem;
-    position: relative;
-}
-
-.portfolioHeader {
-    padding-top: 2rem;
-    width: 100vw;
-    background-color: var(--color-background);
-    margin-bottom: 0;
-    padding-bottom: 2rem;
-    /* box-shadow: 0 0 2px rgba(0, 0, 0, 0.06); */
-}
-
-.portfolioHeader .floatingBanner {
-    position: absolute;
-    top: 1rem;
+/* Header navigation */
+.header {
     display: flex;
-    gap: 0.5rem;
-    align-items: baseline;
-    right: 5rem;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 4rem;
+    background-color: var(--color-portfolio_header_background);
+    box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.05);
 }
 
-.portfolioHeader h1, .header h1 {
-    font-size: 1.6em;
+.header .logo {
+    font-size: 2.4rem;
+    font-weight: bold;
+    color: var(--color-portfolio_theme);
 }
 
-.portfolioHeader h6, .header h6 {
-    font-size: 1.3rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5rem;
-    font-weight: 400;
+.header div.logo span {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color:white;
+    background-color: var(--color-portfolio_theme);
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+}
+
+.header nav ul {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 2rem;
+}
+
+
+.header nav ul li a {
+    color: var(--color-portfolio_text_strong);
+    text-decoration: none;
+    font-size: 1.6rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.header nav ul li a:hover {
+    border-bottom: 0.2rem solid var(--color-portfolio_theme);
+}
+
+.header nav ul li a:global(.disabled) {
+    color: var(--color-portfolio_theme_strong);
+    border-bottom: 0.2rem solid var(--color-portfolio_theme_strong);
+    cursor: default;
+    pointer-events: none;
+}
+
+@media screen and (max-width: 1100px) {
+    .header {
+        flex-direction: column;
+    }
+
+    .header .logo {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .header nav ul li a {
+        font-size: 1.4rem;
+    }
+
+    .header div.logo span {
+        width: 3rem;
+        height: 3rem;
+    }
 }
