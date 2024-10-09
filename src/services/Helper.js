@@ -3,6 +3,8 @@ import i18next from "i18next";
 import { settings } from "../Settings";
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
+import CryptoJS from "crypto-js";
+
 const ajv = new Ajv({ allErrors: true });
 addFormats(ajv);
 
@@ -378,4 +380,25 @@ export const copyToClipboard = async text => {
   } catch (err) {
     return false;
   }
+};
+
+// Encrypt data and store in localStorage
+export const saveToLocalStorage = (key, data) => {
+  if (settings.passphrase) data = CryptoJS.AES.encrypt(JSON.stringify(data), settings.passphrase).toString();
+  localStorage.setItem(key, data);
+};
+
+// Decrypt data from localStorage
+export const loadFromLocalStorage = key => {
+  let data = localStorage.getItem(key);
+  try {
+    if (settings.passphrase) {
+      const bytes = CryptoJS.AES.decrypt(data, settings.passphrase);
+      data = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    }
+  } catch (_) {
+    Log().debug(`localStorage[${key}] may be corrupted!`);
+    return null;
+  }
+  return data;
 };
