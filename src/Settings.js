@@ -5,6 +5,7 @@ export const settings = {
   palette: generateColorPalette(6),
   passphrase: process.env.REACT_APP_PASSPHRASE || "passphrase",
   apiKey: process.env.REACT_APP_API_KEY || "apiKey",
+  apiSecureKey: process.env.REACT_APP_API_SECURE_KEY || "apiSecureKey",
   baseApiUrl: process.env.REACT_APP_API_URL || "http://localhost:5001",
   basicDataReferences: ["users", "countries", "products"], // exemple of implementation
   downloadTypes: ["card", "video", "carousel", "file", "url", "mailto"],

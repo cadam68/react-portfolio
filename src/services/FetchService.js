@@ -187,6 +187,7 @@ const FetchService = () => {
       headers: {
         "Content-Type": "application/json",
         "X-API-Key": settings.apiKey,
+        "X-Secure-Key": settings.apiSecureKey,
       },
       signal: signal,
       body: JSON.stringify({ userid, password, appname }),
@@ -194,6 +195,23 @@ const FetchService = () => {
 
     const data = await res.json();
     if (!res.ok) throw new Error(data.message || "Something went wrong with fetching login");
+    return data;
+  };
+
+  // Example usage : recoverPassword('admin', 'john.doe@example.com');
+  const recoverPassword = async (userid, email) => {
+    const res = await fetch(`${settings.baseApiUrl}/auth/recoverPassword`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-Key": settings.apiKey,
+        "X-Secure-Key": settings.apiSecureKey,
+      },
+      body: JSON.stringify({ userid, email }), // Using userid and email to recover password
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Something went wrong with fetching recoverPassword");
     return data;
   };
 
@@ -207,6 +225,7 @@ const FetchService = () => {
         method: "GET",
         headers: {
           "X-API-Key": settings.apiKey,
+          "X-Secure-Key": settings.apiSecureKey,
           Authorization: token,
         },
       });
@@ -226,6 +245,7 @@ const FetchService = () => {
         headers: {
           "Content-Type": "application/json",
           "X-API-Key": settings.apiKey,
+          "X-Secure-Key": settings.apiSecureKey,
           Authorization: token,
         },
       });
@@ -312,6 +332,7 @@ const FetchService = () => {
     savePortfolio,
     uploadPortfolioDocument,
     login,
+    recoverPassword,
     isAuthorized,
     refreshToken,
     createPortfolioBundle,
