@@ -193,7 +193,8 @@ const FetchService = () => {
       body: JSON.stringify({ userid, password, appname }),
     });
 
-    const data = await res.json();
+    const contentType = res.headers.get("Content-Type");
+    const data = contentType.includes("application/json") ? await res.json() : { message: await res.text() };
     if (!res.ok) throw new Error(data.message || "Something went wrong with fetching login");
     return data;
   };

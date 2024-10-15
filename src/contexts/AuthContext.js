@@ -43,7 +43,7 @@ const AuthContextProvider = ({ children }) => {
     } catch (err) {
       logger.error(`Error during login : ${err}`);
       logout();
-      if (err.message.includes("locked")) throw new Error(err.message);
+      if (err.message.includes("locked") || err.message.includes("many")) throw new Error(err.message);
       else throw new Error("Login failed. Please check your credentials.");
     }
     return true;
