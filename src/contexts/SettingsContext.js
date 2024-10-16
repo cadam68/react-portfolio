@@ -1,15 +1,18 @@
 import { createContext, useContext, useEffect, useMemo, useRef } from "react";
 import useLocalStorageReducer from "../hooks/UseLocalStorageReducer";
 import PropTypes from "prop-types";
+import { value } from "lodash/seq";
 
 const SettingsContext = createContext({
   firstTime: true,
   reset: () => {},
   themeId: 0,
   setThemeId: () => {},
+  getInput: () => {},
+  setInput: () => {},
 });
 
-const initialState = { firstTime: true, themeId: 0 };
+const initialState = { firstTime: true, themeId: 0, inputs: {} };
 
 const reducer = (state, { type, payload }) => {
   switch (type) {
@@ -21,14 +24,46 @@ const reducer = (state, { type, payload }) => {
     }
     case "reset":
       return initialState;
+    case "inputs/set": {
+      const { inputId, value } = payload;
+      return { ...state, inputs: { ...state.inputs, [inputId]: value } };
+    }
+    case "inputs/del": {
+      const { inputId } = payload;
+      const { [inputId]: removedField, ...newInputs } = state.inputs;
+      return { ...state, inputs: newInputs };
+    }
+    case "inputs/reset": {
+      return { ...state, inputs: initialState.inputs };
+    }
     default:
       throw new Error(`Unknown action ${type}`);
   }
 };
 
 const SettingsContextProvider = ({ children }) => {
-  const [{ firstTime, themeId }, dispatch] = useLocalStorageReducer("inline-settings", initialState, reducer);
+  const [{ firstTime, themeId, inputs }, dispatch] = useLocalStorageReducer("inline-settings", initialState, reducer);
   const firstTimeRef = useRef(firstTime);
+
+  useEffect(() => {
+    console.log("iici", inputs);
+  }, [inputs]);
+
+  const resetInputs = () => {
+    dispatch({ type: "inputs/reset" });
+  };
+
+  const delInput = inputId => {
+    dispatch({ type: "inputs/del", payload: { inputId: inputId } });
+  };
+
+  const setInput = (inputId, value) => {
+    dispatch({ type: "inputs/set", payload: { inputId: inputId, value: value } });
+  };
+
+  const getInput = inputId => {
+    return inputs[inputId];
+  };
 
   useEffect(() => {
     if (firstTime) dispatch({ type: "firstTime/false" });
@@ -38,11 +73,11 @@ const SettingsContextProvider = ({ children }) => {
     dispatch({ type: "reset" });
   };
 
-  const setThemeId = (themeId) => {
+  const setThemeId = themeId => {
     dispatch({ type: "themeId/set", payload: { themeId } });
   };
 
-  const contextValues = useMemo(() => ({ firstTime: firstTimeRef.current, reset, themeId, setThemeId }), [firstTime, themeId]);
+  const contextValues = useMemo(() => ({ firstTime: firstTimeRef.current, reset, themeId, setThemeId, getInput, setInput }), [firstTime, themeId]);
   return <SettingsContext.Provider value={contextValues}>{children}</SettingsContext.Provider>;
 };
 

@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Home.module.css";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import PortfolioLink from "../components/inLine/PortfolioLink";
 import SpinnerFullPage from "../components/divers/SpinnerFullPage";
 import { useOutletContext } from "react-router-dom";
 import { removeDiacritics } from "../services/Helper";
+import { useSettingsContext } from "../contexts/SettingsContext";
 
 const Home = () => {
   const { portfolioList } = useOutletContext();
+  const { getInput, setInput } = useSettingsContext();
 
   const [inputValues, setInputValues] = useState({
     searchCriteria: "",
@@ -24,6 +26,13 @@ const Home = () => {
     }
   };
 
+  useEffect(() => {
+    // setInput("field2", "value2");
+    // setInput("field3", 3);
+    console.log("iici-1", getInput("field2"));
+    console.log("iici-1", getInput("field3"));
+  }, []);
+
   if (!portfolioList) return <SpinnerFullPage />;
 
   return (
@@ -37,9 +46,8 @@ const Home = () => {
           Already {portfolioList.length} Portfolio On-Line <FaArrowTrendUp />
         </h2>
         <p>
-          It's time to elevate your online presence and make your mark. Our platform gives you the power to build a portfolio that not only reflects your <em>true potential</em> but also highlights your unique strengths
-          and vision. Stand out from the crowd with a personalized space where your work, story, and creativity take center stage. Whether you're just starting out or looking to refine your online image, our tools make
-          it easy to showcase what makes you special. Tell your story in your own words, connect with the world on your terms, and unleash your creativity to start making waves today.
+          It's time to elevate your online presence and make your mark. Our platform gives you the power to build a portfolio that not only reflects your <em>true potential</em> but also highlights your unique strengths and vision. Stand out from the crowd with a personalized space where your work, story, and creativity take
+          center stage. Whether you're just starting out or looking to refine your online image, our tools make it easy to showcase what makes you special. Tell your story in your own words, connect with the world on your terms, and unleash your creativity to start making waves today.
         </p>
         <div className={styles.portfolioList}>
           <p>
