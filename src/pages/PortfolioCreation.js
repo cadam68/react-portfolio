@@ -8,6 +8,7 @@ import { removeDiacritics } from "../services/Helper";
 import { FetchService } from "../services/FetchService";
 import { useAuthContext } from "../contexts/AuthContext";
 import { Log } from "../services/LogService";
+import { useSettingsContext } from "../contexts/SettingsContext";
 // import { useWebSocket } from "./../contexts/WebSocketContext";
 
 const logger = Log("PortfolioCreation");
@@ -50,13 +51,21 @@ const PortfolioCreation = () => {
   const { Toast } = useToast();
   const { user, logout } = useAuthContext();
   const navigate = useNavigate();
+  const { getInput, setInput } = useSettingsContext();
   // const { sendMessage } = useWebSocket();
 
   useEffect(() => {
-    if (location.state) setFormData({ ...formData, username: location.state.portfolioName || "" });
+    // initialise persistent inputs
+    let portfolioType = getInput("portfolio-creation.field-portfolioType") ?? Object.keys(portfolioTemplate)[0];
+    portfolioType = portfolioTemplate[portfolioType] ? portfolioType : Object.keys(portfolioTemplate)[0];
+    setFormData((previousState) => ({ ...previousState, portfolioType: portfolioType }));
+  }, []);
+
+  useEffect(() => {
+    if (location.state) setFormData((previousState) => ({ ...previousState, username: location.state.portfolioName || "" }));
   }, [location.state]);
 
-  const clearForm = e => {
+  const clearForm = (e) => {
     e?.preventDefault();
     setErrors({});
     setFormData({ portfolioType: formData.portfolioType, username: "", email: "", welcomeText: "", userImage: null, additionalImages: [], videoLink: "", cv: null });
@@ -65,11 +74,13 @@ const PortfolioCreation = () => {
     cvRef.current?.clear();
   };
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+    // persist values
+    if (e.target.name === "portfolioType") setInput("portfolio-creation.field-portfolioType", e.target.value);
   };
 
   const handleFileSelect = (file, startsWith, fieldName) => {
@@ -82,7 +93,7 @@ const PortfolioCreation = () => {
     }
   };
 
-  const handleAdditionalFileSelect = file => {
+  const handleAdditionalFileSelect = (file) => {
     if (!file) return;
     if (file.type.startsWith("image/")) {
       if (formData.additionalImages.length < 6) {
@@ -99,12 +110,12 @@ const PortfolioCreation = () => {
     }
   };
 
-  const removeImage = index => {
+  const removeImage = (index) => {
     const updatedImages = formData.additionalImages.filter((_, i) => i !== index);
     setFormData({ ...formData, additionalImages: updatedImages });
   };
 
-  const validateEmail = email => {
+  const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
@@ -119,7 +130,7 @@ const PortfolioCreation = () => {
     </span>
   );
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let valid = true;
     const newErrors = {};
@@ -169,7 +180,7 @@ const PortfolioCreation = () => {
         let username = formData.username.trim();
         username = username
           .split(" ")
-          .map(item => item[0].toUpperCase() + item.slice(1).toLowerCase())
+          .map((item) => item[0].toUpperCase() + item.slice(1).toLowerCase())
           .join(" ");
 
         logger.debug("submit the formData");
@@ -180,7 +191,8 @@ const PortfolioCreation = () => {
         if (portfolioTemplate[formData.portfolioType].fields.includes("email")) formDataToSubmit.append("email", formData.email);
         if (portfolioTemplate[formData.portfolioType].fields.includes("welcomeText")) formDataToSubmit.append("welcomeText", formData.welcomeText);
         if (portfolioTemplate[formData.portfolioType].fields.includes("userImage")) formDataToSubmit.append("userImage", formData.userImage);
-        if (portfolioTemplate[formData.portfolioType].fields.includes("additionalImages")) formData.additionalImages.forEach((image, index) => formDataToSubmit.append(`additionalImage_${index + 1}`, image));
+        if (portfolioTemplate[formData.portfolioType].fields.includes("additionalImages"))
+          formData.additionalImages.forEach((image, index) => formDataToSubmit.append(`additionalImage_${index + 1}`, image));
         if (portfolioTemplate[formData.portfolioType].fields.includes("videoLink")) formDataToSubmit.append("videoLink", formData.videoLink);
         if (portfolioTemplate[formData.portfolioType].fields.includes("cv")) formDataToSubmit.append("cv", formData.cv);
 
@@ -215,6 +227,8 @@ const PortfolioCreation = () => {
     }
   };
 
+  if (!formData) return;
+
   return (
     <div className="inline-section">
       <hr />
@@ -222,7 +236,7 @@ const PortfolioCreation = () => {
         <form onSubmit={handleSubmit} className={styles.portfolioForm + " inline-form"} encType="multipart/form-data">
           <div className={styles.formGroup}>
             <select disabled={submit} className={styles.h3} name="portfolioType" value={formData.portfolioType} onChange={handleInputChange}>
-              {Object.keys(portfolioTemplate).map(key => (
+              {Object.keys(portfolioTemplate).map((key) => (
                 <option key={key} value={key}>
                   {"Create " + portfolioTemplate[key].name}
                 </option>
@@ -266,7 +280,15 @@ const PortfolioCreation = () => {
             <div className={styles.formGroup}>
               <p className={styles.errorText}>{errors.userImage}&nbsp;</p>
               <span style={{ display: "inline-block" }} className={errors.userImage ? styles.inputError : ""}>
-                <FileSelector ref={userImageRef} disabled={submit || formData.userImage} documentAllowedExtensions={["jpg", "png"]} documentMaxSize={200} onFileSelect={file => handleFileSelect(file, "image/", "userImage")} showSelectedFile={false} buttonText={"Select User Image"} />
+                <FileSelector
+                  ref={userImageRef}
+                  disabled={submit || formData.userImage}
+                  documentAllowedExtensions={["jpg", "png"]}
+                  documentMaxSize={200}
+                  onFileSelect={(file) => handleFileSelect(file, "image/", "userImage")}
+                  showSelectedFile={false}
+                  buttonText={"Select User Image"}
+                />
               </span>
               {formData.userImage && (
                 <div className={styles.imagePreview}>
@@ -277,7 +299,8 @@ const PortfolioCreation = () => {
                     className={styles.removeBtn}
                     onClick={() => {
                       setFormData({ ...formData, userImage: null });
-                    }}>
+                    }}
+                  >
                     Remove
                   </button>
                 </div>
@@ -288,7 +311,15 @@ const PortfolioCreation = () => {
           {portfolioTemplate[formData.portfolioType].fields.includes("additionalImages") && (
             <div className={styles.formGroup}>
               <p className={styles.errorText}>{errors.additionalImages}&nbsp;</p>
-              <FileSelector ref={additionalImagesRef} disabled={submit || formData.additionalImages?.length >= 5} documentAllowedExtensions={["jpg", "png"]} documentMaxSize={200} onFileSelect={handleAdditionalFileSelect} showSelectedFile={false} buttonText={"Select Portfolio Image(s)"} />
+              <FileSelector
+                ref={additionalImagesRef}
+                disabled={submit || formData.additionalImages?.length >= 5}
+                documentAllowedExtensions={["jpg", "png"]}
+                documentMaxSize={200}
+                onFileSelect={handleAdditionalFileSelect}
+                showSelectedFile={false}
+                buttonText={"Select Portfolio Image(s)"}
+              />
               <div className={styles.imagePreviewList}>
                 {formData.additionalImages.map((image, index) => (
                   <div key={index} className={styles.imagePreview}>
@@ -306,7 +337,15 @@ const PortfolioCreation = () => {
             <div className={styles.formGroup}>
               <p className={styles.errorText}>{errors.cv}&nbsp;</p>
               <span style={{ display: "inline-block" }} className={errors.cv ? styles.inputError : ""}>
-                <FileSelector ref={cvRef} disabled={submit || formData.cv} documentAllowedExtensions={["pdf"]} documentMaxSize={400} onFileSelect={file => handleFileSelect(file, "application/pdf", "cv")} showSelectedFile={false} buttonText={"Select CV Document"} />
+                <FileSelector
+                  ref={cvRef}
+                  disabled={submit || formData.cv}
+                  documentAllowedExtensions={["pdf"]}
+                  documentMaxSize={400}
+                  onFileSelect={(file) => handleFileSelect(file, "application/pdf", "cv")}
+                  showSelectedFile={false}
+                  buttonText={"Select CV Document"}
+                />
               </span>
               {formData.cv && (
                 <div className={styles.imagePreview}>
@@ -317,7 +356,8 @@ const PortfolioCreation = () => {
                     className={styles.removeBtn}
                     onClick={() => {
                       setFormData({ ...formData, cv: null });
-                    }}>
+                    }}
+                  >
                     Remove
                   </button>
                 </div>

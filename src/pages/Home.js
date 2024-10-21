@@ -5,11 +5,9 @@ import PortfolioLink from "../components/inLine/PortfolioLink";
 import SpinnerFullPage from "../components/divers/SpinnerFullPage";
 import { useOutletContext } from "react-router-dom";
 import { removeDiacritics } from "../services/Helper";
-import { useSettingsContext } from "../contexts/SettingsContext";
 
 const Home = () => {
   const { portfolioList } = useOutletContext();
-  const { getInput, setInput } = useSettingsContext();
 
   const [inputValues, setInputValues] = useState({
     searchCriteria: "",
@@ -25,13 +23,6 @@ const Home = () => {
       });
     }
   };
-
-  useEffect(() => {
-    // setInput("field2", "value2");
-    // setInput("field3", 3);
-    console.log("iici-1", getInput("field2"));
-    console.log("iici-1", getInput("field3"));
-  }, []);
 
   if (!portfolioList) return <SpinnerFullPage />;
 

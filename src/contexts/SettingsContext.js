@@ -45,10 +45,6 @@ const SettingsContextProvider = ({ children }) => {
   const [{ firstTime, themeId, inputs }, dispatch] = useLocalStorageReducer("inline-settings", initialState, reducer);
   const firstTimeRef = useRef(firstTime);
 
-  useEffect(() => {
-    console.log("iici", inputs);
-  }, [inputs]);
-
   const resetInputs = () => {
     dispatch({ type: "inputs/reset" });
   };
@@ -62,7 +58,7 @@ const SettingsContextProvider = ({ children }) => {
   };
 
   const getInput = inputId => {
-    return inputs[inputId];
+    return inputs?inputs[inputId]:undefined;
   };
 
   useEffect(() => {
@@ -77,7 +73,7 @@ const SettingsContextProvider = ({ children }) => {
     dispatch({ type: "themeId/set", payload: { themeId } });
   };
 
-  const contextValues = useMemo(() => ({ firstTime: firstTimeRef.current, reset, themeId, setThemeId, getInput, setInput }), [firstTime, themeId]);
+  const contextValues = useMemo(() => ({ firstTime: firstTimeRef.current, reset, themeId, setThemeId, getInput, setInput }), [firstTime, themeId, inputs]);
   return <SettingsContext.Provider value={contextValues}>{children}</SettingsContext.Provider>;
 };
 
